@@ -1,10 +1,10 @@
 {
-    "name": "ProjectScope.ProjectName.Tests",
-    "rootNamespace": "ProjectScope.ProjectName.Tests",
+    "name": "HuggingFace.Tests",
+    "rootNamespace": "HuggingFace.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ProjectScope.ProjectName"
+        "HuggingFace"
     ],
     "includePlatforms": [
         "Editor"

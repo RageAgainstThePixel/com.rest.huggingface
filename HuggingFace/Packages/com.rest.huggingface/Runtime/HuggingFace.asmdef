@@ -1,6 +1,6 @@
 {
-    "name": "ProjectScope.ProjectName",
-    "rootNamespace": "ProjectScope.ProjectName",
+    "name": "HuggingFace",
+    "rootNamespace": "HuggingFace",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

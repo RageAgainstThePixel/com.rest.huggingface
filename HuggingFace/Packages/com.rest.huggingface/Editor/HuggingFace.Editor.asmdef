@@ -1,8 +1,8 @@
 {
-    "name": "ProjectScope.ProjectName.Editor",
-    "rootNamespace": "ProjectScope.ProjectName.Editor",
+    "name": "HuggingFace.Editor",
+    "rootNamespace": "HuggingFace.Editor",
     "references": [
-        "ProjectScope.ProjectName"
+        "GUID:71b3ade190d5d9a4fbf02cf7eae8f456"
     ],
     "includePlatforms": [
         "Editor"

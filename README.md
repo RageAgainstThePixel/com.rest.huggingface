@@ -1,12 +1,34 @@
-# upm-template
+# com.rest.huggingface
 
-A Unity package manager repository template for quickly creating and setting up new UPM package projects in Unity.
+[![openupm](https://img.shields.io/npm/v/com.rest.huggingface?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.rest.huggingface/)
 
-## Getting Started
+A Rest.HuggingFace package for the [Unity](https://unity.com/) Game Engine.
 
-1. Create a new repository in GitHub using this template
-2. Clone to your local machine
-3. Run the `InitializeTemplate.ps1` script from powershell, a command line, or terminal
-4. Follow prompt instructions
-5. Open in Unity to generate the missing meta files
-6. Check in project to source control
+## Installing
+
+### Via Unity Package Manager and OpenUPM
+
+- Open your Unity project settings
+- Select the `Package Manager`
+![scoped-registries](images/package-manager-scopes.png)
+- Add the OpenUPM package registry:
+  - Name: `OpenUPM`
+  - URL: `https://package.openupm.com`
+  - Scope(s):
+    - `com.rest.huggingface`
+- Open the Unity Package Manager window
+- Change the Registry from Unity to `My Registries`
+- Add the `Rest.HuggingFace` package
+
+### Via Unity Package Manager and Git url
+
+- Open your Unity Package Manager
+- Add package from git url: `https://github.com/RageAgainstThePixel/com.rest.huggingface.git#upm`
+
+## Documentation
+
+### Project Setup
+
+```csharp
+// TODO
+```
