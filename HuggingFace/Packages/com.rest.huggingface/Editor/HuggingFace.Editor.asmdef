@@ -2,7 +2,9 @@
     "name": "HuggingFace.Editor",
     "rootNamespace": "HuggingFace.Editor",
     "references": [
-        "GUID:71b3ade190d5d9a4fbf02cf7eae8f456"
+        "GUID:71b3ade190d5d9a4fbf02cf7eae8f456",
+        "GUID:7958db66189566541a6363568aee1575",
+        "GUID:28b599e4adde9c94a9b9667d7b08fe83"
     ],
     "includePlatforms": [
         "Editor"

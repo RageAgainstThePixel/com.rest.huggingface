@@ -20,7 +20,7 @@
     "registry": "https://package.openupm.com"
   },
   "dependencies": {
-    "com.utilities.rest": "1.4.2",
-    "com.unity.nuget.newtonsoft-json": "3.2.0"
+    "com.unity.nuget.newtonsoft-json": "3.2.0",
+    "com.utilities.rest": "1.4.3"
   }
 }
