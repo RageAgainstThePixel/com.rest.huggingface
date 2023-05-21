@@ -4,13 +4,11 @@ using NUnit.Framework;
 
 namespace Rest.HuggingFace.Tests
 {
-    internal class ExampleTestScript
+    internal class TestFixture_00_Authentication
     {
         [Test]
-        public void ExampleTestScriptSimplePasses()
+        public void Test_01()
         {
-            // A Test behaves as an ordinary method
-            // Use the Assert class to test conditions
         }
     }
 }

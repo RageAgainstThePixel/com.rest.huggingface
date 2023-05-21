@@ -1,7 +1,9 @@
 {
     "name": "HuggingFace",
     "rootNamespace": "HuggingFace",
-    "references": [],
+    "references": [
+        "GUID:7958db66189566541a6363568aee1575"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
