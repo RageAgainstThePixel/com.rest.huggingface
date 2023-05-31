@@ -3,7 +3,9 @@ using HuggingFace.Hub;
 using HuggingFace.Inference.NaturalLanguageProcessing;
 using HuggingFace.Inference.NaturalLanguageProcessing.FillMask;
 using HuggingFace.Inference.NaturalLanguageProcessing.QuestionAnswering;
+using HuggingFace.Inference.NaturalLanguageProcessing.TableQuestionAnswering;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -57,6 +59,37 @@ namespace Rest.HuggingFace.Tests
             var input = new QuestionAnsweringInput("What's my name?", "My name is Clara and I live in Berkeley.");
             var task = new QuestionAnsweringTask(input, model);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<QuestionAnsweringTask, QuestionAnsweringTaskResult>(task);
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Result);
+            Debug.Log(result.Result.Answer);
+        }
+
+        [Test]
+        public async Task Test_04_TableQuestionAnsweringTask()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("google/tapas-base-finetuned-wtq");
+            var tableTestData = new TestTableData(
+                repositories: new List<string>
+                {
+                    "Transformers", "Datasets", "Tokenizers"
+                },
+                stars: new List<string>
+                {
+                    "36542", "4512", "3934"
+                },
+                contributors: new List<string>
+                {
+                    "651", "77", "34"
+                },
+                languages: new List<string>
+                {
+                    "Python", "Python", "Rust, Python and NodeJS",
+                });
+            var input = new TableQuestionAnsweringInput<TestTableData>("How many stars does the transformers repository have?", tableTestData);
+            var task = new TableQuestionAnsweringTask<TestTableData>(input, model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TableQuestionAnsweringTask<TestTableData>, TableQuestionAnsweringTaskResult>(task);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Result);
             Debug.Log(result.Result.Answer);

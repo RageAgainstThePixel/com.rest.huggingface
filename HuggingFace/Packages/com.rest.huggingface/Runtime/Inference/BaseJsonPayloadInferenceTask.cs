@@ -10,6 +10,7 @@ namespace HuggingFace.Inference
         {
         }
 
-        public override string ToJson(JsonSerializerSettings settings) => JsonConvert.SerializeObject(this, settings);
+        public override string ToJson(JsonSerializerSettings settings)
+            => JsonConvert.SerializeObject(this, settings);
     }
 }
