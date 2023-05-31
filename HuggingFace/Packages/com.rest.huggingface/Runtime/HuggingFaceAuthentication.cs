@@ -8,6 +8,7 @@ namespace HuggingFace
 {
     public sealed class HuggingFaceAuthentication : AbstractAuthentication<HuggingFaceAuthentication, HuggingFaceAuthInfo>
     {
+        internal const string CONFIG_FILE = ".huggingface";
         private const string HUGGING_FACE_API_KEY = nameof(HUGGING_FACE_API_KEY);
 
         /// <summary>
@@ -20,27 +21,30 @@ namespace HuggingFace
         /// Instantiates a new Authentication object that will load the default config.
         /// </summary>
         public HuggingFaceAuthentication()
-            => cachedDefault ??= (LoadFromAsset<HuggingFaceConfiguration>() ??
-                                  LoadFromDirectory()) ??
-                                  LoadFromDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)) ??
-                                  LoadFromEnvironment();
+        {
+            if (cachedDefault != null) { return; }
+
+            cachedDefault = (LoadFromAsset<HuggingFaceConfiguration>() ??
+                             LoadFromDirectory()) ??
+                             LoadFromDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)) ??
+                             LoadFromEnvironment();
+            Info = cachedDefault?.Info;
+        }
 
         /// <summary>
         /// Instantiates a new Authentication object with the given <paramref name="apiKey"/>, which may be <see langword="null"/>.
         /// </summary>
         /// <param name="apiKey">The API key, required to access the API endpoint.</param>
-        public HuggingFaceAuthentication(string apiKey) => authInfo = new HuggingFaceAuthInfo(apiKey);
+        public HuggingFaceAuthentication(string apiKey) => Info = new HuggingFaceAuthInfo(apiKey);
 
         /// <summary>
         /// Instantiates a new Authentication object with the given <paramref name="authInfo"/>, which may be <see langword="null"/>.
         /// </summary>
         /// <param name="authInfo"></param>
-        public HuggingFaceAuthentication(HuggingFaceAuthInfo authInfo) => this.authInfo = authInfo;
-
-        private readonly HuggingFaceAuthInfo authInfo;
+        public HuggingFaceAuthentication(HuggingFaceAuthInfo authInfo) => Info = authInfo;
 
         /// <inheritdoc />
-        public override HuggingFaceAuthInfo Info => authInfo ?? Default.Info;
+        public override HuggingFaceAuthInfo Info { get; }
 
         private static HuggingFaceAuthentication cachedDefault;
 
@@ -59,9 +63,7 @@ namespace HuggingFace
         public override HuggingFaceAuthentication LoadFromAsset<T>()
             => Resources.LoadAll<T>(string.Empty)
                 .Where(asset => asset != null)
-                .Where(asset => asset is HuggingFaceConfiguration config &&
-                                !string.IsNullOrWhiteSpace(config.ApiKey))
-                .Select(asset => asset is HuggingFaceConfiguration config
+                .Select(asset => asset is HuggingFaceConfiguration config && !string.IsNullOrWhiteSpace(config.ApiKey)
                     ? new HuggingFaceAuthentication(config.ApiKey)
                     : null)
                 .FirstOrDefault();
@@ -75,7 +77,7 @@ namespace HuggingFace
 
         /// <inheritdoc />
         /// ReSharper disable once OptionalParameterHierarchyMismatch
-        public override HuggingFaceAuthentication LoadFromDirectory(string directory = null, string filename = ".huggingface", bool searchUp = true)
+        public override HuggingFaceAuthentication LoadFromDirectory(string directory = null, string filename = CONFIG_FILE, bool searchUp = true)
         {
             if (string.IsNullOrWhiteSpace(directory))
             {

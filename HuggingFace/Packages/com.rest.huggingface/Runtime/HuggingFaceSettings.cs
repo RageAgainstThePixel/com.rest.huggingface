@@ -12,16 +12,24 @@ namespace HuggingFace
 
             var config = Resources.LoadAll<HuggingFaceConfiguration>(string.Empty)
                 .FirstOrDefault(asset => asset != null);
-            Default = config != null
-                ? new HuggingFaceSettings(new HuggingFaceSettingsInfo(config.ProxyDomain))
-                : new HuggingFaceSettings(new HuggingFaceSettingsInfo());
+
+            if (config != null)
+            {
+                Info = new HuggingFaceSettingsInfo(config.ProxyDomain);
+                cachedDefault = new HuggingFaceSettings(Info);
+            }
+            else
+            {
+                Info = new HuggingFaceSettingsInfo();
+                cachedDefault = new HuggingFaceSettings(Info);
+            }
         }
 
         public HuggingFaceSettings(HuggingFaceSettingsInfo settingsInfo)
-            => this.settingsInfo = settingsInfo;
+            => Info = settingsInfo;
 
         public HuggingFaceSettings(string domain)
-            => settingsInfo = new HuggingFaceSettingsInfo(domain);
+            => Info = new HuggingFaceSettingsInfo(domain);
 
         private static HuggingFaceSettings cachedDefault;
 
@@ -31,10 +39,10 @@ namespace HuggingFace
             internal set => cachedDefault = value;
         }
 
-        private readonly HuggingFaceSettingsInfo settingsInfo;
-
-        public HuggingFaceSettingsInfo Info => settingsInfo ?? Default.Info;
+        public HuggingFaceSettingsInfo Info { get; }
 
         public string BaseRequestUrlFormat => Info.BaseRequestUrlFormat;
+
+        public string InferenceRequestUrlFormat => Info.InferenceRequestUrlFormat;
     }
 }

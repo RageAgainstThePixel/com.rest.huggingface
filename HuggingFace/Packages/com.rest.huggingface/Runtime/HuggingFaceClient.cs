@@ -1,6 +1,9 @@
+using HuggingFace.Hub;
+using HuggingFace.Inference;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System.Security.Authentication;
+using System.Threading;
 using Utilities.WebRequestRest;
 
 namespace HuggingFace
@@ -21,13 +24,18 @@ namespace HuggingFace
         {
             JsonSerializationOptions = new JsonSerializerSettings
             {
-                DefaultValueHandling = DefaultValueHandling.Ignore
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
             };
+
+            HubEndpoint = new HubEndpoint(this);
+            InferenceEndpoint = new InferenceEndpoint(this);
         }
 
         protected override HttpClient SetupClient(HttpClient httpClient = null)
         {
             httpClient ??= new HttpClient();
+            httpClient.Timeout = Timeout.InfiniteTimeSpan;
             httpClient.DefaultRequestHeaders.Add("User-Agent", "com.rest.huggingface");
             httpClient.DefaultRequestHeaders.Add("Authorization", Rest.GetBearerOAuthToken(Authentication.Info.ApiKey));
             return httpClient;
@@ -41,8 +49,12 @@ namespace HuggingFace
             }
         }
 
-        public override bool HasValidAuthentication => !string.IsNullOrWhiteSpace(Authentication.Info.ApiKey);
+        public override bool HasValidAuthentication => !string.IsNullOrWhiteSpace(Authentication?.Info?.ApiKey);
 
         internal JsonSerializerSettings JsonSerializationOptions { get; }
+
+        public HubEndpoint HubEndpoint { get; }
+
+        public InferenceEndpoint InferenceEndpoint { get; }
     }
 }

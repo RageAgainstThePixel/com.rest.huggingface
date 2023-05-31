@@ -6,11 +6,13 @@ namespace HuggingFace
     public class HuggingFaceSettingsInfo : ISettingsInfo
     {
         internal const string DefaultDomain = "huggingface.co";
+        internal const string InferenceSubDomain = "api-inference";
 
         public HuggingFaceSettingsInfo()
         {
             Domain = DefaultDomain;
-            BaseRequestUrlFormat = $"https://{Domain}/{{0}}";
+            BaseRequestUrlFormat = $"https://{Domain}/api/{{0}}";
+            InferenceRequestUrlFormat = $"https://{InferenceSubDomain}.{Domain}/{{0}}";
         }
 
         public HuggingFaceSettingsInfo(string domain)
@@ -27,11 +29,14 @@ namespace HuggingFace
             }
 
             Domain = domain;
-            BaseRequestUrlFormat = $"https://{Domain}/{{0}}";
+            BaseRequestUrlFormat = $"https://{Domain}/api/{{0}}";
+            InferenceRequestUrlFormat = $"https://{InferenceSubDomain}.{Domain}/{{0}}";
         }
 
         public string Domain { get; }
 
         public string BaseRequestUrlFormat { get; }
+
+        public string InferenceRequestUrlFormat { get; }
     }
 }
