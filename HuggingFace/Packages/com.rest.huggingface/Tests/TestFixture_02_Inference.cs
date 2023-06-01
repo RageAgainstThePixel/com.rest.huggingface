@@ -8,6 +8,7 @@ using HuggingFace.Inference.NaturalLanguageProcessing.TableQuestionAnswering;
 using HuggingFace.Inference.NaturalLanguageProcessing.TextClassification;
 using HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration;
 using HuggingFace.Inference.NaturalLanguageProcessing.TokenClassification;
+using HuggingFace.Inference.NaturalLanguageProcessing.Translation;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -184,6 +185,27 @@ namespace Rest.HuggingFace.Tests
                 {
                     Debug.Log($"{tokenResult.EntityGroup} | {tokenResult.Word} | {tokenResult.Score}");
                 }
+            }
+        }
+
+        [Test]
+        public async Task Test_09_TranslationTask()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("Helsinki-NLP/opus-mt-es-en");
+            var input = new List<string>
+            {
+                "Me llamo Wolfgang y vivo en Berlin",
+                "Los ingredientes de una tortilla de patatas son: huevos, patatas y cebolla"
+            };
+            var task = new TranslationTask(input, model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TranslationTask, TranslationResponse>(task);
+            Assert.IsNotNull(result);
+
+            foreach (var translation in result.Results)
+            {
+                Debug.Log(translation.Text);
             }
         }
     }
