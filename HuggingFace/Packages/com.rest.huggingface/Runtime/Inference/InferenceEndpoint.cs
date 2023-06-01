@@ -14,7 +14,7 @@ namespace HuggingFace.Inference
         protected override string Root => "models";
 
         public async Task<TResult> RunInferenceTaskAsync<TTask, TResult>(TTask task, CancellationToken cancellationToken = default)
-            where TResult : InferenceTaskResult
+            where TResult : InferenceTaskResponse
             where TTask : InferenceTask
         {
             var endpoint = GetInferenceUrl(task.Model.ModelId);

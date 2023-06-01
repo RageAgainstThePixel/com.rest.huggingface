@@ -2,8 +2,26 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing
 {
-    public sealed class SummarizationParams
+    public sealed class SummarizationParameters
     {
+        public SummarizationParameters(
+            [JsonProperty("min_length")] int? minLength = null,
+            [JsonProperty("max_length")] int? maxLength = null,
+            [JsonProperty("top_k")] int? topK = null,
+            [JsonProperty("top_p")] int? topP = null,
+            [JsonProperty("temperature")] float? temperature = null,
+            [JsonProperty("repetition_penalty")] float? repetitionPenalty = null,
+            [JsonProperty("max_time")] float? maxTime = null)
+        {
+            MinLength = minLength;
+            MaxLength = maxLength;
+            TopK = topK;
+            TopP = topP;
+            Temperature = temperature;
+            RepetitionPenalty = repetitionPenalty;
+            MaxTime = maxTime;
+        }
+
         /// <summary>
         /// (Default: None). Integer to define the minimum length in tokens of the output summary.
         /// </summary>

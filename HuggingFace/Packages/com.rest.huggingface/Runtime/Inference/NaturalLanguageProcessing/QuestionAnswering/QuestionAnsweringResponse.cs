@@ -2,32 +2,14 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.QuestionAnswering
 {
-    public class QuestionAnsweringResponse
+    public sealed class QuestionAnsweringResponse : InferenceTaskResponse
     {
-        [JsonConstructor]
-        public QuestionAnsweringResponse(
-            [JsonProperty("score")] double score,
-            [JsonProperty("start")] int start,
-            [JsonProperty("end")] int end,
-            [JsonProperty("answer")] string answer
-        )
+        public QuestionAnsweringResponse(string content, JsonSerializerSettings settings)
+            : base(content, settings)
         {
-            Score = score;
-            Start = start;
-            End = end;
-            Answer = answer;
+            Result = JsonConvert.DeserializeObject<QuestionAnsweringResult>(content, settings);
         }
 
-        [JsonProperty("score")]
-        public double Score { get; }
-
-        [JsonProperty("start")]
-        public int Start { get; }
-
-        [JsonProperty("end")]
-        public int End { get; }
-
-        [JsonProperty("answer")]
-        public string Answer { get; }
+        public QuestionAnsweringResult Result { get; }
     }
 }

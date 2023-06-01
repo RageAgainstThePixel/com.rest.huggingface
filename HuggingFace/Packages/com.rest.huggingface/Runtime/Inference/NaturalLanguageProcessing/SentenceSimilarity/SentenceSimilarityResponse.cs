@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity
 {
-    public sealed class SentenceSimilarityTaskResult : InferenceTaskResult
+    public sealed class SentenceSimilarityResponse : InferenceTaskResponse
     {
-        public SentenceSimilarityTaskResult(string content, JsonSerializerSettings settings)
+        public SentenceSimilarityResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)
         {
             Scores = JsonConvert.DeserializeObject<IReadOnlyList<double>>(content, settings);

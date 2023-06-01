@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextClassification
 {
-    public sealed class TextClassificationTaskResult : InferenceTaskResult
+    public sealed class TextClassificationResponse : InferenceTaskResponse
     {
-        public TextClassificationTaskResult(string content, JsonSerializerSettings settings)
+        public TextClassificationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)
         {
             Results = JsonConvert.DeserializeObject<IReadOnlyList<IReadOnlyList<TextClassificationResult>>>(content, settings);

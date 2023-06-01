@@ -2,9 +2,9 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference
 {
-    public abstract class InferenceTaskResult
+    public abstract class InferenceTaskResponse
     {
-        protected InferenceTaskResult(string content, JsonSerializerSettings settings)
+        protected InferenceTaskResponse(string content, JsonSerializerSettings settings)
         {
             RawContent = content;
             Settings = settings;

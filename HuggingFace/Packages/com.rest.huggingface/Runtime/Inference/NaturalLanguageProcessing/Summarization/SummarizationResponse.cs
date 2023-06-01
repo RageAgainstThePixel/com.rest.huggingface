@@ -1,16 +1,16 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing
 {
-    public sealed class SummarizationResponse
+    public sealed class SummarizationResponse : InferenceTaskResponse
     {
-        [JsonConstructor]
-        public SummarizationResponse([JsonProperty("summary_text")] string text)
+        public SummarizationResponse(string content, JsonSerializerSettings jsonSerializerSettings)
+            : base(content, jsonSerializerSettings)
         {
-            Text = text;
+            Summaries = JsonConvert.DeserializeObject<IReadOnlyList<SummarizationResult>>(content, jsonSerializerSettings);
         }
 
-        [JsonProperty("summary_text")]
-        public string Text { get; }
+        public IReadOnlyList<SummarizationResult> Summaries { get; }
     }
 }

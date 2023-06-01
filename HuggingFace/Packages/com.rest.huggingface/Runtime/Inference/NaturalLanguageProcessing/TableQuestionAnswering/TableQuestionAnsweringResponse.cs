@@ -2,9 +2,9 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TableQuestionAnswering
 {
-    public sealed class TableQuestionAnsweringTaskResult : InferenceTaskResult
+    public sealed class TableQuestionAnsweringResponse : InferenceTaskResponse
     {
-        public TableQuestionAnsweringTaskResult(string content, JsonSerializerSettings settings)
+        public TableQuestionAnsweringResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)
         {
             Result = JsonConvert.DeserializeObject<TableQuestionAnsweringResult>(content, settings);

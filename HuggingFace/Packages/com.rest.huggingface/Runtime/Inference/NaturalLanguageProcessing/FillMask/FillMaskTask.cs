@@ -4,9 +4,9 @@ using System;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.FillMask
 {
-    public sealed class FillMaskInferenceTask : BaseJsonPayloadInferenceTask
+    public sealed class FillMaskTask : BaseJsonPayloadInferenceTask
     {
-        public FillMaskInferenceTask(string input, ModelInfo model = null, InferenceOptions options = null)
+        public FillMaskTask(string input, ModelInfo model = null, InferenceOptions options = null)
             : base(model ?? new ModelInfo("bert-base-uncased"), options)
         {
             if (string.IsNullOrWhiteSpace(input))
