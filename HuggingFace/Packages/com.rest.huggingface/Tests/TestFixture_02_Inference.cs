@@ -3,13 +3,13 @@ using HuggingFace.Hub;
 using HuggingFace.Inference.NaturalLanguageProcessing;
 using HuggingFace.Inference.NaturalLanguageProcessing.FillMask;
 using HuggingFace.Inference.NaturalLanguageProcessing.QuestionAnswering;
+using HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity;
 using HuggingFace.Inference.NaturalLanguageProcessing.TableQuestionAnswering;
+using HuggingFace.Inference.NaturalLanguageProcessing.TextClassification;
+using HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity;
-using HuggingFace.Inference.NaturalLanguageProcessing.TextClassification;
-using HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration;
 using UnityEngine;
 
 namespace Rest.HuggingFace.Tests
@@ -31,9 +31,12 @@ namespace Rest.HuggingFace.Tests
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<FillMaskTask, FillMaskResponse>(task);
             Assert.IsNotNull(result);
 
-            foreach (var resultMask in result.Masks)
+            foreach (var resultMask in result.Results)
             {
-                Debug.Log(resultMask.Sequence);
+                foreach (var maskResult in resultMask)
+                {
+                    Debug.Log(maskResult.Sequence);
+                }
             }
         }
 

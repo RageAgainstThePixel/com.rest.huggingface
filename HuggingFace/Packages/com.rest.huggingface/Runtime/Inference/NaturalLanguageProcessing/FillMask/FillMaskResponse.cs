@@ -1,5 +1,7 @@
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.FillMask
 {
@@ -8,9 +10,24 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.FillMask
         public FillMaskResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)
         {
-            Masks = JsonConvert.DeserializeObject<IReadOnlyList<FillMaskResult>>(content, settings);
+            try
+            {
+                var masks = JsonConvert.DeserializeObject<IReadOnlyList<FillMaskResult>>(content, settings);
+                Results = new List<IReadOnlyList<FillMaskResult>> { masks };
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    Results = JsonConvert.DeserializeObject<IReadOnlyList<IReadOnlyList<FillMaskResult>>>(content, settings);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e);
+                }
+            }
         }
 
-        public IReadOnlyList<FillMaskResult> Masks { get; }
+        public IReadOnlyList<IReadOnlyList<FillMaskResult>> Results { get; }
     }
 }
