@@ -43,11 +43,11 @@ namespace HuggingFace.Inference
             return taskResult;
         }
 
-        public async Task<IReadOnlyList<ModelInfo>> GetRecommendedModelsAsync(string task, CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<ModelInfo>> GetRecommendedModelsAsync(PipelineTag task, CancellationToken cancellationToken = default)
         {
             var models = await client.HubEndpoint.ListModelsAsync(
                 new ModelSearchArguments(
-                    new ModelFilter(task: task),
+                    new ModelFilter(task: task.ToString()),
                     sort: "likes",
                     sortDirection: ModelSearchArguments.Direction.Descending,
                     limit: 5),

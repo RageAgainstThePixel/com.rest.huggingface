@@ -34,5 +34,7 @@ namespace HuggingFace.Hub
         public override string ToString() => Id;
 
         public static implicit operator string(PipelineTag pipelineTag) => pipelineTag.ToString();
+
+        public static implicit operator PipelineTag(string id) => new PipelineTag(id, string.Empty, string.Empty, string.Empty);
     }
 }
