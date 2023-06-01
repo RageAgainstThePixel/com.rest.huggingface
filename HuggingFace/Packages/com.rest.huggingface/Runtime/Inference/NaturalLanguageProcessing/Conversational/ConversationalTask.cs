@@ -18,6 +18,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.Conversational
         [JsonProperty("parameters")]
         public ConversationalParameters Parameters { get; }
 
-        public override string TaskId => "conversational";
+        public override string Id => "conversational";
     }
 }

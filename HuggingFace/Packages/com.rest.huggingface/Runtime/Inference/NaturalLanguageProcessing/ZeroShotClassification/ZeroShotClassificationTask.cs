@@ -19,6 +19,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.ZeroShotClassification
         [JsonProperty("parameters")]
         public ZeroShotClassificationParameters Parameters { get; }
 
-        public override string TaskId => "zero-shot-classification";
+        public override string Id => "zero-shot-classification";
     }
 }

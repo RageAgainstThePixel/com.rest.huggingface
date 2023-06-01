@@ -19,6 +19,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TokenClassification
         [JsonProperty("parameters")]
         public TokenClassificationParameters Parameters { get; }
 
-        public override string TaskId => "token-classification";
+        public override string Id => "token-classification";
     }
 }

@@ -11,7 +11,16 @@ namespace HuggingFace.Hub
     {
         public ModelInfo(string modelId)
         {
-            ModelId = modelId;
+            if (modelId.Contains('/'))
+            {
+                var parts = modelId.Split('/');
+                Author = parts[0];
+                ModelId = parts[1];
+            }
+            else
+            {
+                ModelId = modelId;
+            }
         }
 
         [JsonConstructor]
@@ -22,7 +31,7 @@ namespace HuggingFace.Hub
             [JsonProperty("lastModified")] DateTime lastModified,
             [JsonProperty("private")] bool @private,
             [JsonProperty("disabled")] bool disabled,
-            [JsonProperty("gated")] bool gated,
+            [JsonProperty("gated")] string gated,
             [JsonProperty("pipeline_tag")] string pipelineTag,
             [JsonProperty("tags")] List<string> tags,
             [JsonProperty("downloads")] int downloads,
@@ -63,6 +72,10 @@ namespace HuggingFace.Hub
 
         public static implicit operator ModelInfo(string modelId) => new ModelInfo(modelId);
 
+        public static implicit operator string(ModelInfo modelInfo) => modelInfo.ToString();
+
+        public override string ToString() => string.IsNullOrWhiteSpace(Author) ? ModelId : $"{Author}/{ModelId}";
+
         [JsonProperty("modelId")]
         public string ModelId { get; }
 
@@ -82,7 +95,7 @@ namespace HuggingFace.Hub
         public bool Disabled { get; }
 
         [JsonProperty("gated")]
-        public bool Gated { get; }
+        public string Gated { get; }
 
         [JsonProperty("pipeline_tag")]
         public string PipelineTag { get; }

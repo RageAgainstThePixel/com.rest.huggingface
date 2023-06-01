@@ -6,7 +6,7 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing
 {
     public sealed class SummarizationTask : BaseJsonPayloadInferenceTask
     {
-        public override string TaskId => "summarization";
+        public override string Id => "summarization";
 
         public SummarizationTask(OneOrMoreOf<string> input, SummarizationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
             : base(model ?? new ModelInfo("facebook/bart-large-cnn"), options)

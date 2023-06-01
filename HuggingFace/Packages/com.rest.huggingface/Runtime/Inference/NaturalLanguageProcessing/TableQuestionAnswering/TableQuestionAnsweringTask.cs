@@ -15,6 +15,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TableQuestionAnswering
         [JsonProperty("inputs")]
         public TableQuestionAnsweringInput<TTableData> Input { get; }
 
-        public override string TaskId => "table-question-answering";
+        public override string Id => "table-question-answering";
     }
 }

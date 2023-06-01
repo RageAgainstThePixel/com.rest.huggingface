@@ -15,6 +15,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.Translation
         [JsonProperty("inputs")]
         public IReadOnlyList<string> Input { get; }
 
-        public override string TaskId => "translation";
+        public override string Id => "translation";
     }
 }

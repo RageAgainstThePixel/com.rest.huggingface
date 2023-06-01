@@ -1,6 +1,6 @@
 using HuggingFace;
-using HuggingFace.Hub;
 using NUnit.Framework;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -31,19 +31,17 @@ namespace Rest.HuggingFace.Tests
             {
                 Debug.Log($"{pipelineTag.Id} | {pipelineTag.Label} | {pipelineTag.SubType}");
 
-                var filter = new ModelFilter(task: pipelineTag.ToString());
-                var args = new ModelSearchArguments(filter, limit: 1, cardData: true, fetchConfig: true);
-                var models = await api.HubEndpoint.ListModelsAsync(args);
+                var recommendedModels = await api.InferenceEndpoint.GetRecommendedModelsAsync(pipelineTag);
+                var recommendedModel = recommendedModels.FirstOrDefault(info => !info.Private && !info.Disabled);
+                Assert.IsNotNull(recommendedModel);
 
-                foreach (var model in models)
+                foreach (var model in recommendedModels)
                 {
-                    Debug.Log($"{model.ModelId} | Downloads: {model.Downloads} | PipelineTag: {model.PipelineTag}");
-                    var modelDetails = await api.HubEndpoint.GetModelDetailsAsync(model.ModelId);
-                    Assert.IsNotNull(modelDetails);
+                    Debug.Log($"-->  {model.ModelId} | Likes: {model.Likes}");
 
-                    if (!string.IsNullOrWhiteSpace(modelDetails.MaskToken))
+                    if (!string.IsNullOrWhiteSpace(model.Config?.TaskSpecificParams?.ToString()))
                     {
-                        Debug.LogWarning($"{modelDetails.MaskToken}");
+                        Debug.Log($"        task-specific-params: {model.Config.TaskSpecificParams}");
                     }
                 }
             }

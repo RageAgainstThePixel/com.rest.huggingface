@@ -15,6 +15,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TextClassification
         [JsonProperty("inputs")]
         public IReadOnlyList<string> Input { get; }
 
-        public override string TaskId => "text-classification";
+        public override string Id => "text-classification";
     }
 }

@@ -1,6 +1,6 @@
-using System;
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using System;
 
 namespace HuggingFace.Inference
 {
@@ -19,7 +19,7 @@ namespace HuggingFace.Inference
         }
 
         [JsonIgnore]
-        public abstract string TaskId { get; }
+        public abstract string Id { get; }
 
         [JsonIgnore]
         public ModelInfo Model { get; }
@@ -32,5 +32,9 @@ namespace HuggingFace.Inference
 
         public virtual byte[] ToByteArray()
             => Array.Empty<byte>();
+
+        public override string ToString() => Id;
+
+        public static implicit operator string(InferenceTask task) => task.ToString();
     }
 }

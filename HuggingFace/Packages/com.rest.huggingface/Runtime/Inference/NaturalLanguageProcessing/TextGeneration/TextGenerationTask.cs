@@ -18,6 +18,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
         [JsonProperty("parameters")]
         public TextGenerationParameters Parameters { get; }
 
-        public override string TaskId => "text-generation";
+        public override string Id => "text-generation";
     }
 }

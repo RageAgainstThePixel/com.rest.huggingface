@@ -19,11 +19,11 @@ using UnityEngine;
 namespace Rest.HuggingFace.Tests
 {
     /// <summary>
-    /// Test class for Accelerated Inference APIs
+    /// Test class for Accelerated Inference APIs for Natural Language Processing
     /// A list of tasks and their detailed parameters can be found:
-    /// https://huggingface.co/docs/api-inference/detailed_parameters
+    /// https://huggingface.co/docs/api-inference/detailed_parameters#natural-language-processing
     /// </summary>
-    internal class TestFixture_02_Inference
+    internal class TestFixture_02_Inference_NaturalLanguageProcessing
     {
         [Test]
         public async Task Test_01_FillMaskTask()

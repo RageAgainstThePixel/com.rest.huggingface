@@ -21,8 +21,9 @@ namespace HuggingFace.Hub
             string sort = null,
             Direction sortDirection = Direction.Ascending,
             int? limit = null,
-            bool cardData = false,
-            bool fetchConfig = false)
+            bool? cardData = null,
+            bool? fetchConfig = null,
+            bool? full = null)
         {
             Filter = filter;
             Sort = sort;
@@ -30,6 +31,7 @@ namespace HuggingFace.Hub
             Limit = limit;
             CardData = cardData;
             FetchConfig = fetchConfig;
+            Full = full;
         }
 
         public static implicit operator ModelSearchArguments(string input) => new ModelSearchArguments(new ModelFilter(modelName: input));
@@ -64,7 +66,9 @@ namespace HuggingFace.Hub
         /// <summary>
         ///  Whether to fetch the model configs as well. This is not included in 'full' due to its size.
         /// </summary>
-        public bool FetchConfig { get; set; }
+        public bool? FetchConfig { get; set; }
+
+        public bool? Full { get; set; }
 
         public override string ToString()
         {
@@ -93,7 +97,15 @@ namespace HuggingFace.Hub
             // Handling tasks
             if (Filter?.Tasks is { Count: > 0 })
             {
-                filterList.AddRange(Filter.Tasks);
+                switch (Filter.Tasks.Count)
+                {
+                    case 1:
+                        @params["pipeline_tag"] = Filter.Tasks[0];
+                        break;
+                    default:
+                        filterList.AddRange(Filter.Tasks);
+                        break;
+                }
             }
 
             // Handling trained_dataset
@@ -116,7 +128,7 @@ namespace HuggingFace.Hub
 
             if (CardData.HasValue)
             {
-                @params["cardData"] = CardData.Value.ToString();
+                @params["cardData"] = CardData.Value.ToString().ToLower();
             }
 
             if (Filter is { EmissionsThresholds: not null })
@@ -130,23 +142,24 @@ namespace HuggingFace.Hub
                 @params["sort"] = Sort;
             }
 
-            @params["direction"] = SortDirection switch
+            if (SortDirection == Direction.Descending)
             {
-                Direction.Ascending => "1",
-                Direction.Descending => "-1",
-                _ => throw new ArgumentOutOfRangeException(nameof(SortDirection))
-            };
+                @params["direction"] = "-1";
+            }
 
             if (Limit.HasValue)
             {
-                @params["limit"] = Limit.Value.ToString();
+                @params["limit"] = Limit.Value.ToString().ToLower();
             }
 
-            @params["full"] = "true";
-
-            if (FetchConfig)
+            if (Full.HasValue)
             {
-                @params["fetch_config"] = "true";
+                @params["full"] = Full.Value.ToString().ToLower();
+            }
+
+            if (FetchConfig.HasValue)
+            {
+                @params["fetch_config"] = FetchConfig.Value.ToString().ToLower();
             }
 
             return @params.ToQuery();

@@ -14,6 +14,6 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity
         [JsonProperty("inputs")]
         public SentenceSimilarityInput Input { get; }
 
-        public override string TaskId => "sentence-similarity";
+        public override string Id => "sentence-similarity";
     }
 }

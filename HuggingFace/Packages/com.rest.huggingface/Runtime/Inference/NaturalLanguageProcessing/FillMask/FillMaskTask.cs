@@ -12,7 +12,7 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.FillMask
             Input = input.Values;
         }
 
-        public override string TaskId => "fill-mask";
+        public override string Id => "fill-mask";
 
         [JsonProperty("inputs")]
         public IReadOnlyList<string> Input { get; }
