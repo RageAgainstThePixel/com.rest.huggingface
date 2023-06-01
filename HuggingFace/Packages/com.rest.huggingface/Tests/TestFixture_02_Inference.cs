@@ -7,6 +7,7 @@ using HuggingFace.Inference.NaturalLanguageProcessing.TableQuestionAnswering;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity;
 using UnityEngine;
 
 namespace Rest.HuggingFace.Tests
@@ -93,6 +94,28 @@ namespace Rest.HuggingFace.Tests
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Result);
             Debug.Log(result.Result.Answer);
+        }
+
+        [Test]
+        public async Task Test_05_SentenceSimilarityTask()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("sentence-transformers/all-MiniLM-L6-v2");
+            var input = new SentenceSimilarityInput("That is a happy person", new List<string>
+            {
+                "That is a happy dog",
+                "That is a very happy person",
+                "Today is a sunny day"
+            });
+            var task = new SentenceSimilarityTask(input, model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<SentenceSimilarityTask, SentenceSimilarityTaskResult>(task);
+            Assert.IsNotNull(result);
+
+            foreach (var score in result.Scores)
+            {
+                Debug.Log(score);
+            }
         }
     }
 }
