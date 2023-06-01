@@ -8,6 +8,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity;
+using HuggingFace.Inference.NaturalLanguageProcessing.TextClassification;
 using UnityEngine;
 
 namespace Rest.HuggingFace.Tests
@@ -115,6 +116,30 @@ namespace Rest.HuggingFace.Tests
             foreach (var score in result.Scores)
             {
                 Debug.Log(score);
+            }
+        }
+
+        [Test]
+        public async Task Test_06_TextClassificationTask()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("distilbert-base-uncased-finetuned-sst-2-english");
+            var input = new List<string>
+            {
+                "I like you. I love you",
+                "I don't like you. I hate you",
+            };
+            var task = new TextClassificationTask(input, model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TextClassificationTask, TextClassificationTaskResult>(task);
+            Assert.IsNotNull(result);
+
+            foreach (var classificationResult in result.Results)
+            {
+                foreach (var textClassificationResult in classificationResult)
+                {
+                    Debug.Log($"{textClassificationResult.Label}:{textClassificationResult.Score}");
+                }
             }
         }
     }

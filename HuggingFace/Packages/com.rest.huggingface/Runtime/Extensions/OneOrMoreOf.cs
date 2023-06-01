@@ -16,5 +16,7 @@ namespace HuggingFace.Hub
         public IReadOnlyList<T> Values { get; }
 
         public static implicit operator OneOrMoreOf<T>(T value) => new OneOrMoreOf<T>(value);
+
+        public static implicit operator OneOrMoreOf<T>(List<T> value) => new OneOrMoreOf<T>(value);
     }
 }
