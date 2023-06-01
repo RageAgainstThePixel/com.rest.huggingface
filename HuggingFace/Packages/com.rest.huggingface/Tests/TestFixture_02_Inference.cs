@@ -1,6 +1,7 @@
 using HuggingFace;
 using HuggingFace.Hub;
 using HuggingFace.Inference.NaturalLanguageProcessing;
+using HuggingFace.Inference.NaturalLanguageProcessing.Conversational;
 using HuggingFace.Inference.NaturalLanguageProcessing.FillMask;
 using HuggingFace.Inference.NaturalLanguageProcessing.QuestionAnswering;
 using HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity;
@@ -237,6 +238,23 @@ namespace Rest.HuggingFace.Tests
                     Debug.Log($"{label}: {score}");
                 }
             }
+        }
+
+        [Test]
+        public async Task Test_11_ConversationalTask()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("microsoft/DialoGPT-large");
+            var conversation = new Conversation("Which Movie is the best ?", "It's Die Hard for sure.")
+            {
+                UserInput = "Can you explain why?"
+            };
+            var param = new ConversationalParameters(maxLength: 32);
+            var task = new ConversationalTask(conversation, param, model: model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<ConversationalTask, ConversationalResponse>(task);
+            Assert.IsNotNull(result);
+            Debug.Log(result.Result.Response);
         }
     }
 }

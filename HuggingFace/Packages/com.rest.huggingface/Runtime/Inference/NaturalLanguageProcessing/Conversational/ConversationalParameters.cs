@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace HuggingFace.Inference.NaturalLanguageProcessing
+namespace HuggingFace.Inference.NaturalLanguageProcessing.Conversational
 {
-    public sealed class SummarizationParameters
+    public sealed class ConversationalParameters
     {
         [JsonConstructor]
-        public SummarizationParameters(
+        public ConversationalParameters(
             [JsonProperty("min_length")] int? minLength = null,
             [JsonProperty("max_length")] int? maxLength = null,
             [JsonProperty("top_k")] int? topK = null,
