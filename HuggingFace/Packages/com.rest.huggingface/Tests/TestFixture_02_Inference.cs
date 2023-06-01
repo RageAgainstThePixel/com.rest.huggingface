@@ -7,6 +7,7 @@ using HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity;
 using HuggingFace.Inference.NaturalLanguageProcessing.TableQuestionAnswering;
 using HuggingFace.Inference.NaturalLanguageProcessing.TextClassification;
 using HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration;
+using HuggingFace.Inference.NaturalLanguageProcessing.TokenClassification;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -163,6 +164,26 @@ namespace Rest.HuggingFace.Tests
             foreach (var textGenerationResult in result.Results)
             {
                 Debug.Log(textGenerationResult.Text);
+            }
+        }
+
+        [Test]
+        public async Task Test_08_TokenClassificationTask()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("dbmdz/bert-large-cased-finetuned-conll03-english");
+            var param = new TokenClassificationParameters();
+            var task = new TokenClassificationTask("My name is Sarah Jessica Parker but you can call me Jessica", param, model: model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TokenClassificationTask, TokenClassificationResponse>(task);
+            Assert.IsNotNull(result);
+
+            foreach (var resultResult in result.Results)
+            {
+                foreach (var tokenResult in resultResult)
+                {
+                    Debug.Log($"{tokenResult.EntityGroup} | {tokenResult.Word} | {tokenResult.Score}");
+                }
             }
         }
     }
