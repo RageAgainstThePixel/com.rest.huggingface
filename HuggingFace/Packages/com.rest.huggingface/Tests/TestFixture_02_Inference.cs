@@ -9,6 +9,7 @@ using HuggingFace.Inference.NaturalLanguageProcessing.TextClassification;
 using HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration;
 using HuggingFace.Inference.NaturalLanguageProcessing.TokenClassification;
 using HuggingFace.Inference.NaturalLanguageProcessing.Translation;
+using HuggingFace.Inference.NaturalLanguageProcessing.ZeroShotClassification;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -206,6 +207,35 @@ namespace Rest.HuggingFace.Tests
             foreach (var translation in result.Results)
             {
                 Debug.Log(translation.Text);
+            }
+        }
+
+        [Test]
+        public async Task Test_10_ZeroShotClassificationTask()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("facebook/bart-large-mnli");
+            var input = new List<string>
+            {
+                "Hi, I recently bought a device from your company but it is not working as advertised and I would like to get reimbursed!"
+            };
+            var param = new ZeroShotClassificationParameters(new List<string> { "refund", "legal", "faq" });
+            var task = new ZeroShotClassificationTask(input, param, model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<ZeroShotClassificationTask, ZeroShotClassificationResponse>(task);
+            Assert.IsNotNull(result);
+
+            foreach (var zeroShotResult in result.Results)
+            {
+                Assert.IsTrue(zeroShotResult.Scores.Count == zeroShotResult.Labels.Count);
+                var resultCount = zeroShotResult.Scores.Count;
+
+                for (var i = 0; i < resultCount; i++)
+                {
+                    var label = zeroShotResult.Labels[i];
+                    var score = zeroShotResult.Scores[i];
+                    Debug.Log($"{label}: {score}");
+                }
             }
         }
     }
