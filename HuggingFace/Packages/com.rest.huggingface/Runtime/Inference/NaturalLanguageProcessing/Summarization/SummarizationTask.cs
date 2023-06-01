@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 
@@ -7,15 +8,15 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing
     {
         public override string TaskId => "summarization";
 
-        public SummarizationTask(string input, SummarizationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
+        public SummarizationTask(OneOrMoreOf<string> input, SummarizationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
             : base(model ?? new ModelInfo("facebook/bart-large-cnn"), options)
         {
-            Input = input;
+            Input = input.Values;
             Parameters = parameters;
         }
 
         [JsonProperty("inputs")]
-        public string Input { get; }
+        public IReadOnlyList<string> Input { get; }
 
         [JsonProperty("parameters")]
         public SummarizationParameters Parameters { get; }
