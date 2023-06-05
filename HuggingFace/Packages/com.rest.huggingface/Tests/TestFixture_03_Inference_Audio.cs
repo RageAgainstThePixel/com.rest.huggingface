@@ -43,6 +43,12 @@ namespace HuggingFace.Tests
             var task = new AudioClassificationTask(input, model);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioClassificationTask, AudioClassificationResponse>(task);
             Assert.IsNotNull(result);
+            Assert.IsNotEmpty(result.Results);
+
+            foreach (var classificationResult in result.Results)
+            {
+                Debug.Log($"{classificationResult.Label}: {classificationResult.Score}");
+            }
         }
 
         [Test]

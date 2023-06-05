@@ -23,14 +23,12 @@ namespace HuggingFace.Inference
             where TTask : InferenceTask
         {
             var endpoint = GetInferenceUrl(task.Model);
-            Debug.Log(endpoint);
 
             var json = task.ToJson(client.JsonSerializationOptions);
             HttpContent payload;
 
             if (!string.IsNullOrWhiteSpace(json))
             {
-                Debug.Log(json);
                 payload = json.ToJsonStringContent();
             }
             else

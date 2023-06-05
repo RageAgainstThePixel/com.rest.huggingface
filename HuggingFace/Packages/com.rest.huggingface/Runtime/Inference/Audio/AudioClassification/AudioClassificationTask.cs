@@ -1,5 +1,4 @@
 using HuggingFace.Hub;
-using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.Audio
 {
@@ -11,13 +10,5 @@ namespace HuggingFace.Inference.Audio
         }
 
         public override string Id => "audio-classification";
-    }
-
-    public sealed class AudioClassificationResponse : InferenceTaskResponse
-    {
-        public AudioClassificationResponse(string content, JsonSerializerSettings settings)
-            : base(content, settings)
-        {
-        }
     }
 }
