@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using HuggingFace.Hub;
 using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.ZeroShotClassification
 {
     public sealed class ZeroShotClassificationParameters
     {
-        public ZeroShotClassificationParameters(IReadOnlyList<string> candidateLabels, bool multiLabel = false)
+        public ZeroShotClassificationParameters(OneOrMoreOf<string> candidateLabels, bool multiLabel = false)
         {
-            CandidateLabels = candidateLabels;
+            CandidateLabels = candidateLabels.Values;
             MultiLabel = multiLabel;
         }
 

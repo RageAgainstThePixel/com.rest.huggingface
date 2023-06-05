@@ -218,9 +218,17 @@ namespace HuggingFace.Tests
             var model = new ModelInfo("facebook/bart-large-mnli");
             var input = new List<string>
             {
-                "Hi, I recently bought a device from your company but it is not working as advertised and I would like to get reimbursed!"
+                "I have a problem with my iphone that needs to be resolved asap!"
             };
-            var param = new ZeroShotClassificationParameters(new List<string> { "refund", "legal", "faq" });
+            var candidateLabels = new List<string>
+            {
+                "urgent",
+                "not urgent",
+                "phone",
+                "tablet",
+                "computer"
+            };
+            var param = new ZeroShotClassificationParameters(candidateLabels);
             var task = new ZeroShotClassificationTask(input, param, model);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<ZeroShotClassificationTask, ZeroShotClassificationResponse>(task);
             Assert.IsNotNull(result);
