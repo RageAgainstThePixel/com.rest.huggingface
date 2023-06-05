@@ -4,21 +4,15 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Hub
 {
-    public class ModelTask
+    public sealed class HubAuth
     {
         [JsonConstructor]
-        public ModelTask(
-            [JsonProperty("type")] string type,
-            [JsonProperty("name")] string name)
+        public HubAuth([JsonProperty("type")] string type)
         {
             Type = type;
-            Name = name;
         }
 
         [JsonProperty("type")]
         public string Type { get; }
-
-        [JsonProperty("name")]
-        public string Name { get; }
     }
 }

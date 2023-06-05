@@ -21,7 +21,7 @@ namespace HuggingFace.Hub
             [JsonProperty("periodEnd")] object periodEnd,
             [JsonProperty("avatarUrl")] string avatarUrl,
             [JsonProperty("orgs")] IReadOnlyList<string> organizations,
-            [JsonProperty("auth")] Auth auth)
+            [JsonProperty("auth")] HubAuth hubAuth)
         {
             Type = type;
             Id = id;
@@ -35,7 +35,7 @@ namespace HuggingFace.Hub
             PeriodEnd = periodEnd;
             AvatarUrl = avatarUrl;
             Organizations = organizations;
-            Auth = auth;
+            HubAuth = hubAuth;
         }
 
         [JsonProperty("type")]
@@ -75,6 +75,6 @@ namespace HuggingFace.Hub
         public IReadOnlyList<object> Organizations { get; }
 
         [JsonProperty("auth")]
-        public Auth Auth { get; }
+        public HubAuth HubAuth { get; }
     }
 }

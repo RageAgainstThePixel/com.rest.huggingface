@@ -1,27 +1,14 @@
 using HuggingFace.Hub;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Audio.AutomaticSpeechRecognition
 {
-    public sealed class AutomaticSpeechRecognitionTask : InferenceTask
+    public sealed class AutomaticSpeechRecognitionTask : BaseAudioInferenceTask
     {
-        public AutomaticSpeechRecognitionTask(AutomaticSpeechRecognitionInput input, ModelInfo model = null, InferenceOptions options = null)
-            : base(model ?? new ModelInfo("facebook/wav2vec2-base-960h"), options)
+        public AutomaticSpeechRecognitionTask(SingleSourceAudioInput input, ModelInfo model = null, InferenceOptions options = null)
+            : base(input, model ?? new ModelInfo("jonatasgrosman/wav2vec2-large-xlsr-53-english"), options)
         {
-            Input = input;
         }
-
-        public AutomaticSpeechRecognitionInput Input { get; }
 
         public override string Id => "automatic-speech-recognition";
-
-        public override async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken = default)
-        {
-            await using var memoryStream = new MemoryStream();
-            await Input.Audio.CopyToAsync(memoryStream, cancellationToken);
-            return memoryStream.ToArray();
-        }
     }
 }

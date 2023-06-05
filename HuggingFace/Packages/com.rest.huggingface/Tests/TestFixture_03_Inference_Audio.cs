@@ -2,6 +2,7 @@ using HuggingFace.Hub;
 using HuggingFace.Inference.Audio;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using HuggingFace.Inference.Audio.AutomaticSpeechRecognition;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,10 +20,10 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var model = new ModelInfo("facebook/wav2vec2-base-960h");
+            var model = new ModelInfo("jonatasgrosman/wav2vec2-large-xlsr-53-english");
             var audioPath = AssetDatabase.GUIDToAssetPath("900a512d644c38c47846d9a6e41961f6");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
-            using var input = new AutomaticSpeechRecognitionInput(audioClip);
+            using var input = new SingleSourceAudioInput(audioClip);
             var task = new AutomaticSpeechRecognitionTask(input, model: model);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AutomaticSpeechRecognitionTask, AutomaticSpeechRecognitionResponse>(task);
             Assert.IsNotNull(result);
@@ -33,7 +34,15 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_02_AudioClassificationTask()
         {
-            await Task.CompletedTask;
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("speechbrain/google_speech_command_xvector");
+            var audioPath = AssetDatabase.GUIDToAssetPath("6b684332a20988c45933a5a73b22c429");
+            var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
+            using var input = new SingleSourceAudioInput(audioClip);
+            var task = new AudioClassificationTask(input, model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioClassificationTask, AudioClassificationResponse>(task);
+            Assert.IsNotNull(result);
         }
 
         [Test]

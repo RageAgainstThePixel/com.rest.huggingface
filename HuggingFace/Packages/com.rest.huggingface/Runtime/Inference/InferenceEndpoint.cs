@@ -30,6 +30,7 @@ namespace HuggingFace.Inference
 
             if (!string.IsNullOrWhiteSpace(json))
             {
+                Debug.Log(json);
                 payload = json.ToJsonStringContent();
             }
             else
@@ -49,7 +50,7 @@ namespace HuggingFace.Inference
             var models = await client.HubEndpoint.ListModelsAsync(
                 new ModelSearchArguments(
                     new ModelFilter(task: task.ToString()),
-                    sort: "likes",
+                    sort: "downloads",
                     sortDirection: ModelSearchArguments.Direction.Descending,
                     limit: 5),
                 cancellationToken);

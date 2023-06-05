@@ -5,19 +5,19 @@ using Utilities.Encoding.Wav;
 
 namespace HuggingFace.Inference.Audio
 {
-    public sealed class AutomaticSpeechRecognitionInput : IDisposable
+    public sealed class SingleSourceAudioInput : IDisposable
     {
-        public AutomaticSpeechRecognitionInput(string audioPath)
+        public SingleSourceAudioInput(string audioPath)
             : this(File.OpenRead(audioPath), Path.GetFileName(audioPath))
         {
         }
 
-        public AutomaticSpeechRecognitionInput(AudioClip audio)
+        public SingleSourceAudioInput(AudioClip audio)
             : this(new MemoryStream(audio.EncodeToWav()), $"{audio.name}.wav")
         {
         }
 
-        public AutomaticSpeechRecognitionInput(Stream audio, string audioName)
+        public SingleSourceAudioInput(Stream audio, string audioName)
         {
             Audio = audio;
 
@@ -29,7 +29,7 @@ namespace HuggingFace.Inference.Audio
             AudioName = audioName;
         }
 
-        ~AutomaticSpeechRecognitionInput()
+        ~SingleSourceAudioInput()
             => Dispose(false);
 
         public Stream Audio { get; }

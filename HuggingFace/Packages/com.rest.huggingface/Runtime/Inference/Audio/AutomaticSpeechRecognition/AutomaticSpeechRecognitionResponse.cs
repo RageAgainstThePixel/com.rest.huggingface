@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Audio.AutomaticSpeechRecognition
 {
     public sealed class AutomaticSpeechRecognitionResponse : InferenceTaskResponse
     {
