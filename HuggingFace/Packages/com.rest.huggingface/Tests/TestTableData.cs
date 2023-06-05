@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Rest.HuggingFace.Tests
+namespace HuggingFace.Tests
 {
     internal class TestTableData
     {

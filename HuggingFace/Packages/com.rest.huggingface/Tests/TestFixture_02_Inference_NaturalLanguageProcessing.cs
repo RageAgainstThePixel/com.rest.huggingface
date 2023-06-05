@@ -1,4 +1,3 @@
-using HuggingFace;
 using HuggingFace.Hub;
 using HuggingFace.Inference.NaturalLanguageProcessing;
 using HuggingFace.Inference.NaturalLanguageProcessing.Conversational;
@@ -16,7 +15,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Rest.HuggingFace.Tests
+namespace HuggingFace.Tests
 {
     /// <summary>
     /// Test class for Accelerated Inference APIs for Natural Language Processing

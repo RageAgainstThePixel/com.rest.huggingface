@@ -1,4 +1,4 @@
-namespace Rest.HuggingFace.Tests
+namespace HuggingFace.Tests
 {
     /// <summary>
     /// Test class for Accelerated Inference APIs for Audio processing

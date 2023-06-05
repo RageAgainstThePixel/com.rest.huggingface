@@ -1,4 +1,3 @@
-using HuggingFace;
 using HuggingFace.Hub;
 using HuggingFace.Inference.Audio;
 using NUnit.Framework;
@@ -6,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-namespace Rest.HuggingFace.Tests
+namespace HuggingFace.Tests
 {
     /// <summary>
     /// Test class for Accelerated Inference APIs for Audio processing

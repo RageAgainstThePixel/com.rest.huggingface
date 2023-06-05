@@ -1,10 +1,9 @@
-using HuggingFace;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Rest.HuggingFace.Tests
+namespace HuggingFace.Tests
 {
     internal class TestFixture_01_Hub
     {
