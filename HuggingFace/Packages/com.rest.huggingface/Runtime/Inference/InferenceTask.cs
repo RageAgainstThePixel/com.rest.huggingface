@@ -1,6 +1,8 @@
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HuggingFace.Inference
 {
@@ -30,8 +32,8 @@ namespace HuggingFace.Inference
         public virtual string ToJson(JsonSerializerSettings settings)
             => string.Empty;
 
-        public virtual byte[] ToByteArray()
-            => Array.Empty<byte>();
+        public virtual async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken = default)
+            => await Task.FromResult(Array.Empty<byte>());
 
         public override string ToString() => Id;
 

@@ -5,6 +5,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "HuggingFace",
+        "HuggingFace.Inference.Audio",
         "Utilities.Rest"
     ],
     "includePlatforms": [

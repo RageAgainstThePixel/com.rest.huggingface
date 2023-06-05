@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -17,11 +18,11 @@ namespace HuggingFace.Inference
 
         protected override string Root => "models";
 
-        public async Task<TResult> RunInferenceTaskAsync<TTask, TResult>(TTask task, CancellationToken cancellationToken = default)
-            where TResult : InferenceTaskResponse
+        public async Task<TResponse> RunInferenceTaskAsync<TTask, TResponse>(TTask task, CancellationToken cancellationToken = default)
+            where TResponse : InferenceTaskResponse
             where TTask : InferenceTask
         {
-            var endpoint = GetInferenceUrl(task.Model.ModelId);
+            var endpoint = GetInferenceUrl(task.Model);
             Debug.Log(endpoint);
 
             var json = task.ToJson(client.JsonSerializationOptions);
@@ -29,18 +30,18 @@ namespace HuggingFace.Inference
 
             if (!string.IsNullOrWhiteSpace(json))
             {
-                Debug.Log(json);
                 payload = json.ToJsonStringContent();
             }
             else
             {
-                payload = new ByteArrayContent(task.ToByteArray());
+                payload = new ByteArrayContent(await task.ToByteArrayAsync(cancellationToken));
+                const string octetStream = "application/octet-stream";
+                payload.Headers.ContentType = new MediaTypeHeaderValue(octetStream);
             }
 
             var result = await client.Client.PostAsync(endpoint, payload, cancellationToken);
             var resultAsString = await result.ReadAsStringAsync(true);
-            var taskResult = Activator.CreateInstance(typeof(TResult), resultAsString, client.JsonSerializationOptions) as TResult;
-            return taskResult;
+            return Activator.CreateInstance(typeof(TResponse), resultAsString, client.JsonSerializationOptions) as TResponse;
         }
 
         public async Task<IReadOnlyList<ModelInfo>> GetRecommendedModelsAsync(PipelineTag task, CancellationToken cancellationToken = default)
