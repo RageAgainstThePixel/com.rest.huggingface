@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextClassification
 {
-    public class TextClassificationResult
+    public sealed class TextClassificationResult
     {
         [JsonConstructor]
         public TextClassificationResult(
