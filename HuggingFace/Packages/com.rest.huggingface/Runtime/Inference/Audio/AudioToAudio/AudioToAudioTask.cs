@@ -2,10 +2,10 @@ using HuggingFace.Hub;
 
 namespace HuggingFace.Inference.Audio
 {
-    public sealed class AudioToAudioTask : InferenceTask
+    public sealed class AudioToAudioTask : BaseAudioInferenceTask
     {
-        public AudioToAudioTask(ModelInfo model, InferenceOptions options)
-            : base(model, options)
+        public AudioToAudioTask(SingleSourceAudioInput input, ModelInfo model = null, InferenceOptions options = null)
+            : base(input, model, options)
         {
         }
 

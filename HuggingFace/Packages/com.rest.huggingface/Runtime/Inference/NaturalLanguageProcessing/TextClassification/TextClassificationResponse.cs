@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextClassification
 {
-    public sealed class TextClassificationResponse : InferenceTaskResponse
+    public sealed class TextClassificationResponse : JsonInferenceTaskResponse
     {
         public TextClassificationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

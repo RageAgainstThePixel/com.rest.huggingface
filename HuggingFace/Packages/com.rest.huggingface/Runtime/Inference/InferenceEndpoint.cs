@@ -38,9 +38,38 @@ namespace HuggingFace.Inference
                 payload.Headers.ContentType = new MediaTypeHeaderValue(octetStream);
             }
 
+            // client.Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/wav"));
             var result = await client.Client.PostAsync(endpoint, payload, cancellationToken);
-            var resultAsString = await result.ReadAsStringAsync(true);
-            return Activator.CreateInstance(typeof(TResponse), resultAsString, client.JsonSerializationOptions) as TResponse;
+
+            if (typeof(JsonInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
+            {
+                var resultAsString = await result.ReadAsStringAsync(true);
+                return Activator.CreateInstance(typeof(TResponse), resultAsString, client.JsonSerializationOptions) as TResponse;
+            }
+
+            if (typeof(BinaryInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
+            {
+                await result.CheckResponseAsync();
+                var response = Activator.CreateInstance(typeof(TResponse)) as TResponse;
+
+                if (response is BinaryInferenceTaskResponse taskResponse)
+                {
+                    await using var contentStream = await result.Content.ReadAsStreamAsync();
+
+                    try
+                    {
+                        await taskResponse.DecodeAsync(contentStream, cancellationToken);
+                    }
+                    finally
+                    {
+                        await contentStream.DisposeAsync();
+                    }
+                }
+
+                return response;
+            }
+
+            throw new InvalidOperationException($"{nameof(TResponse)} does not implement known task responses!");
         }
 
         public async Task<IReadOnlyList<ModelInfo>> GetRecommendedModelsAsync(PipelineTag task, CancellationToken cancellationToken = default)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TokenClassification
 {
-    public sealed class TokenClassificationResponse : InferenceTaskResponse
+    public sealed class TokenClassificationResponse : JsonInferenceTaskResponse
     {
         public TokenClassificationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

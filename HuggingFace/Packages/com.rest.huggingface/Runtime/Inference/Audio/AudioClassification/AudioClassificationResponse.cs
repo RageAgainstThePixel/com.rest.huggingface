@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HuggingFace.Inference.Audio
 {
-    public sealed class AudioClassificationResponse : InferenceTaskResponse
+    public sealed class AudioClassificationResponse : JsonInferenceTaskResponse
     {
         public AudioClassificationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

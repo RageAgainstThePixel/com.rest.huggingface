@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
 {
-    public sealed class TextGenerationResponse : InferenceTaskResponse
+    public sealed class TextGenerationResponse : JsonInferenceTaskResponse
     {
         public TextGenerationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

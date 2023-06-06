@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity
 {
-    public sealed class SentenceSimilarityResponse : InferenceTaskResponse
+    public sealed class SentenceSimilarityResponse : JsonInferenceTaskResponse
     {
         public SentenceSimilarityResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

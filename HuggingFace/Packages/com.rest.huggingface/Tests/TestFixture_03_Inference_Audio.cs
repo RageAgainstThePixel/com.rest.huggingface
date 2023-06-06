@@ -54,7 +54,14 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_03_TextToSpeechTask()
         {
-            await Task.CompletedTask;
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("facebook/fastspeech2-en-ljspeech");
+            var task = new TextToSpeechTask("This is a test run", model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Result);
+            Debug.Log(result.CachedPath);
         }
 
         [Test]

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.FillMask
 {
-    public sealed class FillMaskResponse : InferenceTaskResponse
+    public sealed class FillMaskResponse : JsonInferenceTaskResponse
     {
         public FillMaskResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

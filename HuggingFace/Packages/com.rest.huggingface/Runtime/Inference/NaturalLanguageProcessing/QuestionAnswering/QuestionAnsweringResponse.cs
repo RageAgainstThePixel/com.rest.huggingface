@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.QuestionAnswering
 {
-    public sealed class QuestionAnsweringResponse : InferenceTaskResponse
+    public sealed class QuestionAnsweringResponse : JsonInferenceTaskResponse
     {
         public QuestionAnsweringResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

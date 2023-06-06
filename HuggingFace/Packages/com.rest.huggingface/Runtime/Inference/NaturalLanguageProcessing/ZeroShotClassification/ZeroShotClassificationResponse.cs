@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.ZeroShotClassification
 {
-    public sealed class ZeroShotClassificationResponse : InferenceTaskResponse
+    public sealed class ZeroShotClassificationResponse : JsonInferenceTaskResponse
     {
         public ZeroShotClassificationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)

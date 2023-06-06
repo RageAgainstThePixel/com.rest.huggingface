@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace HuggingFace.Inference.Audio.AutomaticSpeechRecognition
 {
-    public sealed class AutomaticSpeechRecognitionResponse : InferenceTaskResponse
+    public sealed class AutomaticSpeechRecognitionResponse : JsonInferenceTaskResponse
     {
         public AutomaticSpeechRecognitionResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)
