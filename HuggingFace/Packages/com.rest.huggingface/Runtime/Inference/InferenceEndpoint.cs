@@ -22,23 +22,25 @@ namespace HuggingFace.Inference
             where TTask : InferenceTask
         {
             var endpoint = GetInferenceUrl(task.Model);
-            Debug.Log(endpoint);
-
             Response response;
-            var json = task.ToJson(client.JsonSerializationOptions);
 
-            if (!string.IsNullOrWhiteSpace(json))
+            if (typeof(BaseJsonPayloadInferenceTask).IsAssignableFrom(typeof(TTask)))
             {
-                Debug.Log(json);
-                response = await Rest.PostAsync(endpoint, json, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+                var jsonData = task.ToJson(client.JsonSerializationOptions);
+                Debug.Log(jsonData);
+                response = await Rest.PostAsync(endpoint, jsonData, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            }
+            else if (typeof(BinaryInferenceTaskResponse).IsAssignableFrom(typeof(TTask)))
+            {
+                var byteData = await task.ToByteArrayAsync(cancellationToken);
+                // DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/wav"));
+                response = await Rest.PostAsync(endpoint, byteData, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             }
             else
             {
-                var byteData = await task.ToByteArrayAsync(cancellationToken);
-                response = await Rest.PostAsync(endpoint, byteData, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+                throw new InvalidOperationException($"{nameof(TTask)} does not implement a known task!");
             }
 
-            // Rest.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/wav"));
             response.Validate(true);
 
             if (typeof(JsonInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
@@ -67,7 +69,7 @@ namespace HuggingFace.Inference
                 return binaryResponse;
             }
 
-            throw new InvalidOperationException($"{nameof(TResponse)} does not implement known task responses!");
+            throw new InvalidOperationException($"{nameof(TResponse)} does not implement a known task responses!");
         }
 
         public async Task<IReadOnlyList<ModelInfo>> GetRecommendedModelsAsync(PipelineTag task, CancellationToken cancellationToken = default)
