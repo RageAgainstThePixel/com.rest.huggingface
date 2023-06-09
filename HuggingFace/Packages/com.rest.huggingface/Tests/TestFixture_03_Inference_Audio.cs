@@ -1,8 +1,8 @@
 using HuggingFace.Hub;
 using HuggingFace.Inference.Audio;
+using HuggingFace.Inference.Audio.AutomaticSpeechRecognition;
 using NUnit.Framework;
 using System.Threading.Tasks;
-using HuggingFace.Inference.Audio.AutomaticSpeechRecognition;
 using UnityEditor;
 using UnityEngine;
 

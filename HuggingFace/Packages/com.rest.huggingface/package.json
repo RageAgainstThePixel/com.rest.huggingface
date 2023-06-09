@@ -20,7 +20,7 @@
     "registry": "https://package.openupm.com"
   },
   "dependencies": {
-    "com.utilities.rest": "1.4.6",
+    "com.utilities.rest": "2.0.0",
     "com.utilities.encoder.wav": "1.0.4"
   },
   "hideInEditor": false

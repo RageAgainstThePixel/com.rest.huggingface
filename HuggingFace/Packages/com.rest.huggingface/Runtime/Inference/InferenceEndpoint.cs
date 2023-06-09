@@ -2,13 +2,12 @@ using HuggingFace.Hub;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Utilities.Rest.Extensions;
+using Utilities.WebRequestRest;
 
 namespace HuggingFace.Inference
 {
@@ -25,38 +24,35 @@ namespace HuggingFace.Inference
             var endpoint = GetInferenceUrl(task.Model);
             Debug.Log(endpoint);
 
+            Response response;
             var json = task.ToJson(client.JsonSerializationOptions);
-            HttpContent payload;
 
             if (!string.IsNullOrWhiteSpace(json))
             {
                 Debug.Log(json);
-                payload = json.ToJsonStringContent();
+                response = await Rest.PostAsync(endpoint, json, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             }
             else
             {
-                payload = new ByteArrayContent(await task.ToByteArrayAsync(cancellationToken));
-                const string octetStream = "application/octet-stream";
-                payload.Headers.ContentType = new MediaTypeHeaderValue(octetStream);
+                var byteData = await task.ToByteArrayAsync(cancellationToken);
+                response = await Rest.PostAsync(endpoint, byteData, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             }
 
-            // client.Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/wav"));
-            var result = await client.Client.PostAsync(endpoint, payload, cancellationToken);
+            // Rest.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/wav"));
+            response.Validate(true);
 
             if (typeof(JsonInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
             {
-                var resultAsString = await result.ReadAsStringAsync(true);
-                return Activator.CreateInstance(typeof(TResponse), resultAsString, client.JsonSerializationOptions) as TResponse;
+                return Activator.CreateInstance(typeof(TResponse), response.Body, client.JsonSerializationOptions) as TResponse;
             }
 
             if (typeof(BinaryInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
             {
-                await result.CheckResponseAsync();
-                var response = Activator.CreateInstance(typeof(TResponse)) as TResponse;
+                var binaryResponse = Activator.CreateInstance(typeof(TResponse)) as TResponse;
 
-                if (response is BinaryInferenceTaskResponse taskResponse)
+                if (binaryResponse is BinaryInferenceTaskResponse taskResponse)
                 {
-                    await using var contentStream = await result.Content.ReadAsStreamAsync();
+                    await using var contentStream = new MemoryStream(response.Data);
 
                     try
                     {
@@ -68,7 +64,7 @@ namespace HuggingFace.Inference
                     }
                 }
 
-                return response;
+                return binaryResponse;
             }
 
             throw new InvalidOperationException($"{nameof(TResponse)} does not implement known task responses!");
@@ -100,8 +96,8 @@ namespace HuggingFace.Inference
                     }
                     catch (Exception e)
                     {
-                        if (e is HttpRequestException httpEx &&
-                            httpEx.Message.Contains("[403]"))
+                        if (e is RestException httpEx &&
+                            httpEx.Response.Code == 403)
                         {
                             Debug.LogWarning(httpEx.Message);
                         }
@@ -112,7 +108,7 @@ namespace HuggingFace.Inference
                     }
                 }
 
-                return Task.Run(GetModelDetailsTaskInternalAsync, cancellationToken);
+                return GetModelDetailsTaskInternalAsync();
             }
 
             #endregion locals

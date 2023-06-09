@@ -36,7 +36,7 @@ namespace HuggingFace.Inference.Audio
                 await fileStream.DisposeAsync();
             }
 
-            Result = await Rest.DownloadAudioClipAsync($"file://{filePath}", AudioType.WAV, cancellationToken: cancellationToken);
+            Result = await Rest.DownloadAudioClipAsync($"file://{filePath}", AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
         }
     }
 }

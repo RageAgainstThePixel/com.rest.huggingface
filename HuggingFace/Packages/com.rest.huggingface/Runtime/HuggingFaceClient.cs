@@ -1,9 +1,8 @@
 using HuggingFace.Hub;
 using HuggingFace.Inference;
 using Newtonsoft.Json;
-using System.Net.Http;
+using System.Collections.Generic;
 using System.Security.Authentication;
-using System.Threading;
 using Utilities.WebRequestRest;
 
 namespace HuggingFace
@@ -17,10 +16,9 @@ namespace HuggingFace
         /// or <see langword="null"/> to attempt to use the <see cref="HuggingFaceAuthentication.Default"/>,
         /// potentially loading from environment vars or from a config file.</param>
         /// <param name="settings">Optional, <see cref="HuggingFaceSettings"/> for specifying a proxy domain.</param>
-        /// <param name="httpClient">Optional, <see cref="HttpClient"/>.</param>
         /// <exception cref="AuthenticationException">Raised when authentication details are missing or invalid.</exception>
-        public HuggingFaceClient(HuggingFaceAuthentication authentication = null, HuggingFaceSettings settings = null, HttpClient httpClient = null)
-            : base(authentication ?? HuggingFaceAuthentication.Default, settings ?? HuggingFaceSettings.Default, httpClient)
+        public HuggingFaceClient(HuggingFaceAuthentication authentication = null, HuggingFaceSettings settings = null)
+            : base(authentication ?? HuggingFaceAuthentication.Default, settings ?? HuggingFaceSettings.Default)
         {
             JsonSerializationOptions = new JsonSerializerSettings
             {
@@ -32,14 +30,6 @@ namespace HuggingFace
             InferenceEndpoint = new InferenceEndpoint(this);
         }
 
-        protected override HttpClient SetupClient(HttpClient httpClient = null)
-        {
-            httpClient ??= new HttpClient();
-            httpClient.Timeout = Timeout.InfiniteTimeSpan;
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "com.rest.huggingface");
-            httpClient.DefaultRequestHeaders.Add("Authorization", Rest.GetBearerOAuthToken(Authentication.Info.ApiKey));
-            return httpClient;
-        }
 
         protected override void ValidateAuthentication()
         {
@@ -48,6 +38,15 @@ namespace HuggingFace
                 throw new AuthenticationException("You must provide API authentication.  Please refer to https://github.com/RageAgainstThePixel/com.rest.huggingface#authentication for details.");
             }
         }
+
+        protected override void SetupDefaultRequestHeaders()
+            => DefaultRequestHeaders = new Dictionary<string, string>
+            {
+#if !UNITY_WEBGL1
+                {"User-Agent", "com.rest.huggingface" },
+#endif
+                {"Authorization", Rest.GetBearerOAuthToken(Authentication.Info.ApiKey) }
+            };
 
         public override bool HasValidAuthentication => !string.IsNullOrWhiteSpace(Authentication?.Info?.ApiKey);
 

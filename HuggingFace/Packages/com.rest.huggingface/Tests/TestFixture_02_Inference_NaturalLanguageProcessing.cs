@@ -252,7 +252,7 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var model = new ModelInfo("microsoft/DialoGPT-large");
+            var model = new ModelInfo("microsoft/DialoGPT-medium");
             var conversation = new Conversation("Which Movie is the best ?", "It's Die Hard for sure.")
             {
                 UserInput = "Can you explain why?"

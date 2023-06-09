@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Threading;
 using System.Threading.Tasks;
 using Utilities.Rest.Extensions;
+using Utilities.WebRequestRest;
 
 namespace HuggingFace.Hub
 {
@@ -24,9 +25,9 @@ namespace HuggingFace.Hub
         /// <param name="cancellationToken"></param>
         public async Task<ModelsTagsByType> GetModelTagsAsync(CancellationToken cancellationToken = default)
         {
-            var response = await client.Client.GetAsync(GetUrl("models-tags-by-type"), cancellationToken);
-            var responseAsString = await response.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<ModelsTagsByType>(responseAsString, client.JsonSerializationOptions);
+            var response = await Rest.GetAsync(GetUrl("models-tags-by-type"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            response.Validate();
+            return JsonConvert.DeserializeObject<ModelsTagsByType>(response.Body, client.JsonSerializationOptions);
         }
 
         /// <summary>
@@ -44,9 +45,9 @@ namespace HuggingFace.Hub
                 uriBuilder.Query = modelSearchArgs.ToString();
             }
 
-            var response = await client.Client.GetAsync(uriBuilder.Uri, cancellationToken);
-            var responseAsString = await response.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<IReadOnlyList<ModelInfo>>(responseAsString, client.JsonSerializationOptions);
+            var response = await Rest.GetAsync(uriBuilder.Uri.ToString(), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            response.Validate();
+            return JsonConvert.DeserializeObject<IReadOnlyList<ModelInfo>>(response.Body, client.JsonSerializationOptions);
         }
 
         /// <summary>
@@ -89,9 +90,9 @@ namespace HuggingFace.Hub
                 uriBuilder.Query = @params.ToQuery();
             }
 
-            var response = await client.Client.GetAsync(uriBuilder.Uri, cancellationToken);
-            var responseAsString = await response.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<ModelInfo>(responseAsString, client.JsonSerializationOptions);
+            var response = await Rest.GetAsync(uriBuilder.Uri.ToString(), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            response.Validate();
+            return JsonConvert.DeserializeObject<ModelInfo>(response.Body, client.JsonSerializationOptions);
         }
 
         #endregion Models
@@ -104,9 +105,9 @@ namespace HuggingFace.Hub
         /// <param name="cancellationToken"></param>
         public async Task<DatasetsTagsByType> GetDatasetTagsAsync(CancellationToken cancellationToken = default)
         {
-            var response = await client.Client.GetAsync(GetUrl("datasets-tags-by-type"), cancellationToken);
-            var responseAsString = await response.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<DatasetsTagsByType>(responseAsString, client.JsonSerializationOptions);
+            var response = await Rest.GetAsync(GetUrl("datasets-tags-by-type"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            response.Validate();
+            return JsonConvert.DeserializeObject<DatasetsTagsByType>(response.Body, client.JsonSerializationOptions);
         }
 
         /// <summary>
@@ -124,9 +125,9 @@ namespace HuggingFace.Hub
             //    uriBuilder.Query = datasetSearchArgs.ToString();
             //}
 
-            //var response = await client.Client.GetAsync(uriBuilder.Uri, cancellationToken);
-            //var responseAsString = await response.ReadAsStringAsync(true);
-            //return responseAsString;
+            //var response = await Rest.GetAsync(uriBuilder.Uri, cancellationToken);
+            //var response.Body = await response.ReadAsStringAsync(true);
+            //return response.Body;
         }
 
         /// <summary>
@@ -165,9 +166,9 @@ namespace HuggingFace.Hub
         {
             throw new NotImplementedException();
             //var uriBuilder = new UriBuilder(GetUrl("spaces"));
-            //var response = await client.Client.GetAsync(uriBuilder.Uri, cancellationToken);
-            //var responseAsString = await response.ReadAsStringAsync(true);
-            //return responseAsString;
+            //var response = await Rest.GetAsync(uriBuilder.Uri, cancellationToken);
+            //var response.Body = await response.ReadAsStringAsync(true);
+            //return response.Body;
         }
 
         /// <summary>
@@ -201,9 +202,9 @@ namespace HuggingFace.Hub
         /// <returns><see cref="UserInfo"/></returns>
         public async Task<UserInfo> WhoAmIAsync(CancellationToken cancellationToken = default)
         {
-            var response = await client.Client.GetAsync(GetUrl("whoami-v2"), cancellationToken);
-            var responseAsString = await response.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<UserInfo>(responseAsString, client.JsonSerializationOptions);
+            var response = await Rest.GetAsync(GetUrl("whoami-v2"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            response.Validate();
+            return JsonConvert.DeserializeObject<UserInfo>(response.Body, client.JsonSerializationOptions);
         }
     }
 }

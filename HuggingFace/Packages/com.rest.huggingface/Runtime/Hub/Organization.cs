@@ -1,41 +1,36 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace HuggingFace.Hub
 {
-    public sealed class UserInfo
+    public sealed class Organization
     {
         [JsonConstructor]
-        public UserInfo(
+        public Organization(
             [JsonProperty("type")] string type,
             [JsonProperty("id")] string id,
             [JsonProperty("name")] string name,
             [JsonProperty("fullname")] string fullname,
             [JsonProperty("email")] string email,
-            [JsonProperty("emailVerified")] bool emailVerified,
+            [JsonProperty("apiToken")] string apiToken,
+            [JsonProperty("periodEnd")] object periodEnd,
             [JsonProperty("plan")] string plan,
             [JsonProperty("canPay")] bool canPay,
-            [JsonProperty("isPro")] bool isPro,
-            [JsonProperty("periodEnd")] object periodEnd,
             [JsonProperty("avatarUrl")] string avatarUrl,
-            [JsonProperty("orgs")] IReadOnlyList<Organization> organizations,
-            [JsonProperty("auth")] HubAuth hubAuth)
+            [JsonProperty("roleInOrg")] string roleInOrg)
         {
             Type = type;
             Id = id;
             Name = name;
             Fullname = fullname;
             Email = email;
-            EmailVerified = emailVerified;
+            ApiToken = apiToken;
+            PeriodEnd = periodEnd;
             Plan = plan;
             CanPay = canPay;
-            IsPro = isPro;
-            PeriodEnd = periodEnd;
             AvatarUrl = avatarUrl;
-            Organizations = organizations;
-            HubAuth = hubAuth;
+            RoleInOrg = roleInOrg;
         }
 
         [JsonProperty("type")]
@@ -53,8 +48,11 @@ namespace HuggingFace.Hub
         [JsonProperty("email")]
         public string Email { get; }
 
-        [JsonProperty("emailVerified")]
-        public bool EmailVerified { get; }
+        [JsonProperty("apiToken")]
+        public string ApiToken { get; }
+
+        [JsonProperty("periodEnd")]
+        public object PeriodEnd { get; }
 
         [JsonProperty("plan")]
         public string Plan { get; }
@@ -62,19 +60,10 @@ namespace HuggingFace.Hub
         [JsonProperty("canPay")]
         public bool CanPay { get; }
 
-        [JsonProperty("isPro")]
-        public bool IsPro { get; }
-
-        [JsonProperty("periodEnd")]
-        public object PeriodEnd { get; }
-
         [JsonProperty("avatarUrl")]
         public string AvatarUrl { get; }
 
-        [JsonProperty("orgs")]
-        public IReadOnlyList<Organization> Organizations { get; }
-
-        [JsonProperty("auth")]
-        public HubAuth HubAuth { get; }
+        [JsonProperty("roleInOrg")]
+        public string RoleInOrg { get; }
     }
 }
