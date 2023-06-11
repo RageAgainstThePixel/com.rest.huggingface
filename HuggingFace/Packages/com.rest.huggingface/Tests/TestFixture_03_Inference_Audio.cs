@@ -60,7 +60,7 @@ namespace HuggingFace.Tests
             var task = new TextToSpeechTask("This is a test run", model);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Result);
+            Assert.IsNotNull(result.AudioClip);
             Debug.Log(result.CachedPath);
         }
 

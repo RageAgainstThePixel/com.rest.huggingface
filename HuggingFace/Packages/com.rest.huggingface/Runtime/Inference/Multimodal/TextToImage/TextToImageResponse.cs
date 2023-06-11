@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Utilities.WebRequestRest;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Multimodal.TextToImage
 {
-    public sealed class TextToSpeechResponse : BinaryInferenceTaskResponse
+    public sealed class TextToImageResponse : BinaryInferenceTaskResponse
     {
         public string CachedPath { get; private set; }
 
-        public AudioClip AudioClip { get; private set; }
+        public Texture2D Image { get; private set; }
 
         public override async Task DecodeAsync(Stream stream, CancellationToken cancellationToken = default)
         {
             await Rest.ValidateCacheDirectoryAsync();
-            var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.wav");
+            var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
             Debug.Log(filePath);
             CachedPath = filePath;
             var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
@@ -36,7 +36,7 @@ namespace HuggingFace.Inference.Audio
                 await fileStream.DisposeAsync();
             }
 
-            AudioClip = await Rest.DownloadAudioClipAsync($"file://{filePath}", AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
+            Image = await Rest.DownloadTextureAsync($"file://{filePath}", parameters: null, cancellationToken: cancellationToken);
         }
     }
 }
