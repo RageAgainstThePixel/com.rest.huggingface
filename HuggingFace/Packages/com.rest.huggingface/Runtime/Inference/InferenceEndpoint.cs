@@ -30,22 +30,25 @@ namespace HuggingFace.Inference
                 Debug.Log(jsonData);
                 response = await Rest.PostAsync(endpoint, jsonData, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             }
-            else if (typeof(BinaryInferenceTaskResponse).IsAssignableFrom(typeof(TTask)))
+            else
             {
                 var byteData = await task.ToByteArrayAsync(cancellationToken);
                 // DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/wav"));
                 response = await Rest.PostAsync(endpoint, byteData, parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
-            }
-            else
-            {
-                throw new InvalidOperationException($"{nameof(TTask)} does not implement a known task!");
             }
 
             response.Validate(true);
 
             if (typeof(JsonInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
             {
-                return Activator.CreateInstance(typeof(TResponse), response.Body, client.JsonSerializationOptions) as TResponse;
+                var jsonResponse = Activator.CreateInstance(typeof(TResponse), response.Body, client.JsonSerializationOptions) as TResponse;
+
+                if (jsonResponse is B64JsonInferenceTaskResponse b64JsonInferenceTaskResponse)
+                {
+                    await b64JsonInferenceTaskResponse.DecodeAsync(cancellationToken);
+                }
+
+                return jsonResponse;
             }
 
             if (typeof(BinaryInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
@@ -69,7 +72,7 @@ namespace HuggingFace.Inference
                 return binaryResponse;
             }
 
-            throw new InvalidOperationException($"{nameof(TResponse)} does not implement a known task responses!");
+            throw new InvalidOperationException($"{typeof(TResponse).Name} does not implement a known {nameof(InferenceTaskResponse)}!");
         }
 
         public async Task<IReadOnlyList<ModelInfo>> GetRecommendedModelsAsync(PipelineTag task, CancellationToken cancellationToken = default)

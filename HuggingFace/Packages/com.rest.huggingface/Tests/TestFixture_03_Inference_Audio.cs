@@ -67,7 +67,22 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_04_AudioToAudioTask()
         {
-            await Task.CompletedTask;
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var model = new ModelInfo("speechbrain/sepformer-wham");
+            var audioPath = AssetDatabase.GUIDToAssetPath("07d1a9fd7238ed941af19229414ce747");
+            var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
+            using var input = new SingleSourceAudioInput(audioClip);
+            var task = new AudioToAudioTask(input, model);
+            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioToAudioTask, AudioToAudioResponse>(task);
+            Assert.IsNotNull(result);
+            Assert.IsNotEmpty(result.Results);
+
+            foreach (var audioBlob in result.Results)
+            {
+                Debug.Log(audioBlob.Label);
+                Assert.IsFalse(string.IsNullOrWhiteSpace(audioBlob.Blob));
+            }
         }
     }
 }
