@@ -1,6 +1,6 @@
 using HuggingFace.Hub;
 
-namespace HuggingFace.Inference.ComputerVision
+namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
 {
     public sealed class ImageSegmentationTask : InferenceTask
     {

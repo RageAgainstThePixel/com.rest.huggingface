@@ -1,12 +1,12 @@
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Audio.AudioToAudio
 {
-    public sealed class AudioInfo
+    public sealed class AudioToAudioResult
     {
         [JsonConstructor]
-        public AudioInfo(
+        public AudioToAudioResult(
             [JsonProperty("label")] string label,
             [JsonProperty("blob")] string blob)
         {

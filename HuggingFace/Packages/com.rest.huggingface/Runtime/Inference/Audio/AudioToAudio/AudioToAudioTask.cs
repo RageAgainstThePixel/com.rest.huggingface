@@ -1,6 +1,6 @@
 using HuggingFace.Hub;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Audio.AudioToAudio
 {
     public sealed class AudioToAudioTask : BaseAudioInferenceTask
     {

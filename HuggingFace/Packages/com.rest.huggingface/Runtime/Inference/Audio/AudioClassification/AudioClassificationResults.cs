@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Audio.AudioClassification
 {
     public sealed class AudioClassificationResults
     {

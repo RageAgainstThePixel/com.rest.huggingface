@@ -1,5 +1,7 @@
 using HuggingFace.Hub;
 using HuggingFace.Inference.Audio;
+using HuggingFace.Inference.Audio.AudioClassification;
+using HuggingFace.Inference.Audio.AudioToAudio;
 using HuggingFace.Inference.Audio.AutomaticSpeechRecognition;
 using NUnit.Framework;
 using System.Threading.Tasks;
