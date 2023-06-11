@@ -1,0 +1,27 @@
+{
+  "name": "com.rest.huggingface",
+  "displayName": "HuggingFace",
+  "description": "A Non-Official HuggingFace Rest Client for Unity (UPM)",
+  "keywords": [],
+  "version": "1.0.0-preview.1",
+  "unity": "2021.3",
+  "documentationUrl": "https://github.com/RageAgainstThePixel/com.rest.huggingface#documentation",
+  "changelogUrl": "https://github.com/RageAgainstThePixel/com.rest.huggingface/releases",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "repository": "https://github.com/RageAgainstThePixel/com.rest.huggingface.git"
+  },
+  "author": {
+    "name": "Stephen Hodgson",
+    "url": "https://github.com/StephenHodgson"
+  },
+  "publishConfig": {
+    "registry": "https://package.openupm.com"
+  },
+  "dependencies": {
+    "com.utilities.rest": "2.0.1",
+    "com.utilities.encoder.wav": "1.0.4"
+  },
+  "hideInEditor": false
+}
