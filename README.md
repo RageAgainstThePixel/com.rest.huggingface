@@ -4,7 +4,7 @@
 
 A non-official [HuggingFace](https://huggingface.co/) RESTful client for the [Unity](https://unity.com/) Game Engine.
 
-I am not affiliated with BlockadeLabs and an account with api access is required.
+I am not affiliated with HuggingFace and an account with api access is required.
 
 ***All copyrights, trademarks, logos, and assets are the property of their respective owners.***
 
