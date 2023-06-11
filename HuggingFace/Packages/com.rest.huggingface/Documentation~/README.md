@@ -24,6 +24,7 @@ The recommended installation method is though the unity package manager and [Ope
   - URL: `https://package.openupm.com`
   - Scope(s):
     - `com.rest.huggingface`
+    - `com.utilities`
 - Open the Unity Package Manager window
 - Change the Registry from Unity to `My Registries`
 - Add the `HuggingFace` package
