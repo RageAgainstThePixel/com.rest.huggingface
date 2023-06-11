@@ -86,3 +86,8 @@ StreamingAssets.meta
 # ====================== #
 # Project Specific Links #
 # ====================== #
+HuggingFace/Assets/Resources
+HuggingFace/Assets/Resources.meta
+HuggingFace/Assets/Plugins
+HuggingFace/Assets/Plugins.meta
+HuggingFace/ProjectSettings/SceneTemplateSettings.json
