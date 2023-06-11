@@ -42,7 +42,7 @@ namespace HuggingFace
         protected override void SetupDefaultRequestHeaders()
             => DefaultRequestHeaders = new Dictionary<string, string>
             {
-#if !UNITY_WEBGL1
+#if !UNITY_WEBGL
                 {"User-Agent", "com.rest.huggingface" },
 #endif
                 {"Authorization", Rest.GetBearerOAuthToken(Authentication.Info.ApiKey) }
