@@ -95,6 +95,12 @@ namespace HuggingFace.Hub
             return JsonConvert.DeserializeObject<ModelInfo>(response.Body, client.JsonSerializationOptions);
         }
 
+        public async Task GetRecommendedModel(string task, CancellationToken cancellationToken = default)
+        {
+            var response = await Rest.GetAsync(GetUrl("/tasks"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            response.Validate(true);
+        }
+
         #endregion Models
 
         /// <summary>
