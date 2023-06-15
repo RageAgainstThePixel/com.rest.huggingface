@@ -45,28 +45,5 @@ namespace HuggingFace.Tests
                 }
             }
         }
-
-        [Test]
-        public async Task Test_03_Datasets()
-        {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.HubEndpoint);
-            var datasetTags = await api.HubEndpoint.GetDatasetTagsAsync();
-            Assert.IsNotNull(datasetTags);
-            Debug.Log($"{datasetTags.TaskIds.Count} Task Categories");
-
-            // await api.HubEndpoint.ListDatasetsAsync();
-            // await api.HubEndpoint.GetDatasetDetailsAsync("");
-        }
-
-        [Test]
-        public async Task Test_04_Spaces()
-        {
-            //var api = new HuggingFaceClient();
-            //Assert.IsNotNull(api.HubEndpoint);
-            await Task.CompletedTask;
-            // await api.HubEndpoint.ListSpacesAsync();
-            // await api.HubEndpoint.GetSpaceDetailsAsync("");
-        }
     }
 }
