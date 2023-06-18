@@ -1,4 +1,5 @@
-using HuggingFace.Hub;
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Inference.Multimodal.TextToImage;
 using NUnit.Framework;
 using System.Threading.Tasks;
@@ -12,17 +13,16 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var model = new ModelInfo("stabilityai/stable-diffusion-2-1");
             var inputs = new TextToImageInputs("An astronaut riding a horse on the moon.")
             {
                 NegativePrompt = "low resolution, blurry",
                 Height = 1024,
                 Width = 1024,
             };
-            var task = new TextToImageTask(inputs, model);
-            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToImageTask, TextToImageResponse>(task);
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Image);
+            var task = new TextToImageTask(inputs);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToImageTask, TextToImageResponse>(task);
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Image);
         }
     }
 }

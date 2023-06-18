@@ -2,10 +2,14 @@
 
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HuggingFace.Inference;
+using UnityEngine;
 using Utilities.Rest.Extensions;
 using Utilities.WebRequestRest;
 
@@ -95,110 +99,110 @@ namespace HuggingFace.Hub
             return JsonConvert.DeserializeObject<ModelInfo>(response.Body, client.JsonSerializationOptions);
         }
 
-        #endregion Models
-
-        #region Datasets
-
         /// <summary>
-        /// Gets all the available dataset tags hosted in the Hub
+        /// Gets a collection of all the available tasks.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        public async Task<DatasetsTagsByType> GetDatasetTagsAsync(CancellationToken cancellationToken = default)
+        /// <param name="cancellationToken">Optional, <see cref="CancellationToken"/>.</param>
+        /// <returns><see cref="IReadOnlyDictionary{TKey,TValue}"/></returns>
+        public async Task<IReadOnlyDictionary<string, TaskInfo>> GetAllTasksAsync(CancellationToken cancellationToken = default)
         {
-            var response = await Rest.GetAsync(GetUrl("datasets-tags-by-type"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
+            var response = await Rest.GetAsync(GetUrl("tasks"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             response.Validate();
-            return JsonConvert.DeserializeObject<DatasetsTagsByType>(response.Body, client.JsonSerializationOptions);
+            return JsonConvert.DeserializeObject<IReadOnlyDictionary<string, TaskInfo>>(response.Body, client.JsonSerializationOptions);
         }
 
         /// <summary>
-        /// Get information from all datasets in the Hub.
+        /// Gets the recommended model for a given task.
         /// </summary>
-        /// <param name="datasetSearchArgs"></param>
-        /// <param name="cancellationToken"></param>
-        public Task ListDatasetsAsync(DataSetSearchArguments datasetSearchArgs = null, CancellationToken cancellationToken = default)
+        /// <param name="cancellationToken">Optional, <see cref="CancellationToken"/></param>
+        /// <returns>The recommended <see cref="ModelInfo"/> for this task.</returns>
+        public async Task<ModelInfo> GetRecommendedModelAsync<T>(CancellationToken cancellationToken = default) where T : InferenceTask
         {
-            throw new NotImplementedException();
-            //var uriBuilder = new UriBuilder(GetUrl("datasets"));
-
-            //if (datasetSearchArgs != null)
-            //{
-            //    uriBuilder.Query = datasetSearchArgs.ToString();
-            //}
-
-            //var response = await Rest.GetAsync(uriBuilder.Uri, cancellationToken);
-            //var response.Body = await response.ReadAsStringAsync(true);
-            //return response.Body;
+            var task = Activator.CreateInstance<T>();
+            return await GetRecommendedModelAsync(task.Id, cancellationToken);
         }
 
         /// <summary>
-        /// Get all information for a specific dataset.
-        /// - full: Whether to fetch most dataset data, such as all tags, the files, etc.
+        /// Gets the recommended model for a given task.
         /// </summary>
-        /// <param name="repoId"></param>
-        /// <param name="revision"></param>
-        /// <param name="filesMetadata"></param>
-        /// <param name="cancellationToken"></param>
-        public Task GetDatasetDetailsAsync(string repoId, string revision = null, bool filesMetadata = false, CancellationToken cancellationToken = default)
+        /// <param name="task">The task to use to get recommended model.</param>
+        /// <param name="cancellationToken">Optional, <see cref="CancellationToken"/></param>
+        /// <returns>The recommended <see cref="ModelInfo"/> for this task.</returns>
+        public async Task<ModelInfo> GetRecommendedModelAsync(PipelineTag task, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
-            //var uriBuilder = new UriBuilder(GetUrl(string.IsNullOrWhiteSpace(revision)
-            //    ? $"datasets/{repoId}"
-            //    : $"datasets/{repoId}/revision/{Uri.EscapeDataString(revision)}"));
+            var tasks = await GetAllTasksAsync(cancellationToken);
 
-            //if (filesMetadata)
-            //{
-            //    uriBuilder.Query = "blobs=true";
-            //}
+            if (tasks.TryGetValue(task, out var taskInfo))
+            {
+                var modelId = taskInfo.WidgetModels.FirstOrDefault();
 
-            //Debug.Log(uriBuilder.Uri);
-            //await Task.CompletedTask;
-        }
+                if (!string.IsNullOrWhiteSpace(modelId))
+                {
+                    return await GetModelDetailsAsync(modelId, cancellationToken: cancellationToken);
+                }
+            }
 
-        #endregion Datasets
-
-        #region Spaces
-
-        /// <summary>
-        /// Get information from all Spaces in the Hub.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        public Task ListSpacesAsync(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-            //var uriBuilder = new UriBuilder(GetUrl("spaces"));
-            //var response = await Rest.GetAsync(uriBuilder.Uri, cancellationToken);
-            //var response.Body = await response.ReadAsStringAsync(true);
-            //return response.Body;
+            return null;
         }
 
         /// <summary>
-        /// Get all information for a specific space.
+        /// Gets a collection of recommended models based on search criteria for a given task.
         /// </summary>
-        /// <param name="repoId"></param>
-        /// <param name="revision"></param>
-        /// <param name="filesMetadata"></param>
-        /// <param name="cancellationToken"></param>
-        public Task GetSpaceDetailsAsync(string repoId, string revision = null, bool filesMetadata = false, CancellationToken cancellationToken = default)
+        /// <param name="task">The task to use when searching for recommended models.</param>
+        /// <param name="sort">Optional, The category to sort by. Default is 'downloads', but other options include by 'likes' and 'modified'.</param>
+        /// <param name="limit">Optional, The number of results, Default is 5.</param>
+        /// <param name="cancellationToken">Optional, <see cref="CancellationToken"/></param>
+        /// <returns>A list of <see cref="ModelInfo"/>s.</returns>
+        public async Task<IReadOnlyList<ModelInfo>> GetRecommendedModelsAsync(PipelineTag task, string sort = "downloads", int limit = 5, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
-            //var uriBuilder = new UriBuilder(GetUrl(string.IsNullOrWhiteSpace(revision)
-            //    ? $"spaces/{repoId}"
-            //    : $"spaces/{repoId}/revision/{Uri.EscapeDataString(revision)}"));
+            var models = await client.HubEndpoint.ListModelsAsync(
+                new ModelSearchArguments(
+                    new ModelFilter(task: task.ToString()),
+                    sort: sort,
+                    sortDirection: ModelSearchArguments.Direction.Descending,
+                    limit: limit),
+                cancellationToken);
+            var results = new ConcurrentBag<ModelInfo>();
+            var tasks = models.Select(GetModelDetailsTask).ToList();
+            await Task.WhenAll(tasks);
+            return results.ToList();
 
-            //if (filesMetadata)
-            //{
-            //    uriBuilder.Query = "blobs=true";
-            //}
+            #region locals
 
-            //Debug.Log(uriBuilder.Uri);
-            //await Task.CompletedTask;
+            Task GetModelDetailsTask(ModelInfo model)
+            {
+                async Task GetModelDetailsTaskInternalAsync()
+                {
+                    try
+                    {
+                        results.Add(await client.HubEndpoint.GetModelDetailsAsync(model.ModelId, cancellationToken: cancellationToken));
+                    }
+                    catch (Exception e)
+                    {
+                        if (e is RestException httpEx &&
+                            httpEx.Response.Code == 403)
+                        {
+                            Debug.LogWarning(httpEx.Message);
+                        }
+                        else
+                        {
+                            Debug.LogError(e);
+                        }
+                    }
+                }
+
+                return GetModelDetailsTaskInternalAsync();
+            }
+
+            #endregion locals
         }
 
-        #endregion Spaces
+        #endregion Models
 
         /// <summary>
         /// Get username and organizations the user belongs to.
         /// </summary>
+        /// <param name="cancellationToken">Optional, <see cref="CancellationToken"/></param>
         /// <returns><see cref="UserInfo"/></returns>
         public async Task<UserInfo> WhoAmIAsync(CancellationToken cancellationToken = default)
         {

@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -6,8 +8,10 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.ZeroShotClassification
 {
     public sealed class ZeroShotClassificationTask : BaseJsonPayloadInferenceTask
     {
+        internal ZeroShotClassificationTask() { }
+
         public ZeroShotClassificationTask(OneOrMoreOf<string> input, ZeroShotClassificationParameters parameters, ModelInfo model = null, InferenceOptions options = null)
-            : base(model ?? new ModelInfo("facebook/bart-large-mnli"), options)
+            : base(model, options)
         {
             Input = input.Values;
             Parameters = parameters;
