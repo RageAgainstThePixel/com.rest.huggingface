@@ -12,7 +12,7 @@ I am not affiliated with HuggingFace and an account with api access is required.
 
 Requires Unity 2021.3 LTS or higher.
 
-The recommended installation method is though the unity package manager and [OpenUPM](https://openupm.com/packages/com.openai.unity).
+The recommended installation method is though the unity package manager and [OpenUPM](https://openupm.com/packages/com.rest.huggingface).
 
 ### Via Unity Package Manager and OpenUPM
 

@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,19 +25,19 @@ namespace HuggingFace.Inference.Audio.AudioToAudio
 
         /// <inheritdoc />
         public override async Task DecodeAsync(CancellationToken cancellationToken = default)
-            => await Task.WhenAll(Results.Select(audioInfo => DecodeAudioAsync(audioInfo, cancellationToken)).ToList());
+            => await Task.WhenAll(Results.Select(result => DecodeAudioAsync(result, cancellationToken)).ToList());
 
-        private static async Task DecodeAudioAsync(AudioToAudioResult audioToAudioResult, CancellationToken cancellationToken)
+        private static async Task DecodeAudioAsync(AudioToAudioResult result, CancellationToken cancellationToken)
         {
             await Rest.ValidateCacheDirectoryAsync();
 
-            if (!Rest.TryGetDownloadCacheItem(audioToAudioResult.Blob, out var localFilePath))
+            if (!Rest.TryGetDownloadCacheItem(result.Blob, out var localFilePath))
             {
                 await using var fileStream = new FileStream(localFilePath, FileMode.Create, FileAccess.ReadWrite);
-                await fileStream.WriteAsync(Convert.FromBase64String(audioToAudioResult.Blob), cancellationToken);
+                await fileStream.WriteAsync(Convert.FromBase64String(result.Blob), cancellationToken);
             }
 
-            audioToAudioResult.AudioClip = await Rest.DownloadAudioClipAsync(localFilePath, AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
+            result.AudioClip = await Rest.DownloadAudioClipAsync(localFilePath, AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
         }
     }
 }

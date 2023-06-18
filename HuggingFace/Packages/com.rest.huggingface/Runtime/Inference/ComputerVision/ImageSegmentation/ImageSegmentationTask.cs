@@ -1,11 +1,13 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Hub;
 
 namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
 {
-    public sealed class ImageSegmentationTask : InferenceTask
+    public sealed class ImageSegmentationTask : BaseImageInferenceTask
     {
-        public ImageSegmentationTask(ModelInfo model, InferenceOptions options)
-            : base(model, options)
+        public ImageSegmentationTask(SingleSourceImageInput input, ModelInfo model = null, InferenceOptions options = null)
+            : base(input, model, options)
         {
         }
 
