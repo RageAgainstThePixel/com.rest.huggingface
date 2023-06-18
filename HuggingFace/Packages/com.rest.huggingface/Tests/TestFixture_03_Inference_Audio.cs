@@ -27,10 +27,10 @@ namespace HuggingFace.Tests
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
             var task = new AutomaticSpeechRecognitionTask(input);
-            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AutomaticSpeechRecognitionTask, AutomaticSpeechRecognitionResponse>(task);
-            Assert.IsNotNull(result);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(result.Result));
-            Debug.Log(result.Result);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<AutomaticSpeechRecognitionTask, AutomaticSpeechRecognitionResponse>(task);
+            Assert.IsNotNull(response);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(response.Result));
+            Debug.Log(response.Result);
         }
 
         [Test]
@@ -42,13 +42,13 @@ namespace HuggingFace.Tests
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
             var task = new AudioClassificationTask(input);
-            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioClassificationTask, AudioClassificationResponse>(task);
-            Assert.IsNotNull(result);
-            Assert.IsNotEmpty(result.Results);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioClassificationTask, AudioClassificationResponse>(task);
+            Assert.IsNotNull(response);
+            Assert.IsNotEmpty(response.Results);
 
-            foreach (var classificationResult in result.Results)
+            foreach (var result in response.Results)
             {
-                Debug.Log($"{classificationResult.Label}: {classificationResult.Score}");
+                Debug.Log($"{result.Label}: {result.Score}");
             }
         }
 
@@ -58,10 +58,10 @@ namespace HuggingFace.Tests
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
             var task = new TextToSpeechTask("This is a test run");
-            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.AudioClip);
-            Debug.Log(result.CachedPath);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.AudioClip);
+            Debug.Log(response.CachedPath);
         }
 
         [Test]
@@ -73,11 +73,11 @@ namespace HuggingFace.Tests
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
             var task = new AudioToAudioTask(input);
-            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioToAudioTask, AudioToAudioResponse>(task);
-            Assert.IsNotNull(result);
-            Assert.IsNotEmpty(result.Results);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioToAudioTask, AudioToAudioResponse>(task);
+            Assert.IsNotNull(response);
+            Assert.IsNotEmpty(response.Results);
 
-            foreach (var audioBlob in result.Results)
+            foreach (var audioBlob in response.Results)
             {
                 Debug.Log(audioBlob.Label);
                 Assert.IsFalse(string.IsNullOrWhiteSpace(audioBlob.Blob));

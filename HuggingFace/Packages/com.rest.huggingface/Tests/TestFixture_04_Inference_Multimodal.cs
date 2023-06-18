@@ -20,9 +20,9 @@ namespace HuggingFace.Tests
                 Width = 1024,
             };
             var task = new TextToImageTask(inputs);
-            var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToImageTask, TextToImageResponse>(task);
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Image);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToImageTask, TextToImageResponse>(task);
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Image);
         }
     }
 }
