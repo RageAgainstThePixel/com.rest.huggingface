@@ -3,12 +3,14 @@
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.ZeroShotClassification
 {
     public sealed class ZeroShotClassificationTask : BaseJsonPayloadInferenceTask
     {
-        internal ZeroShotClassificationTask() { }
+        [Preserve]
+        public ZeroShotClassificationTask() { }
 
         public ZeroShotClassificationTask(OneOrMoreOf<string> input, ZeroShotClassificationParameters parameters, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

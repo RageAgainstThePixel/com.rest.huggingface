@@ -1,14 +1,18 @@
-using HuggingFace.Hub;
+//using HuggingFace.Hub;
+//using UnityEngine.Scripting;
 
-namespace HuggingFace.Inference.Multimodal.ImageToText
-{
-    public class ImageToTextTask : InferenceTask
-    {
-        public ImageToTextTask(ModelInfo model, InferenceOptions options)
-            : base(model, options)
-        {
-        }
+//namespace HuggingFace.Inference.Multimodal.ImageToText
+//{
+//    public class ImageToTextTask : InferenceTask
+//    {
+//        [Preserve]
+//        public ImageToTextTask() { }
 
-        public override string Id => "image-to-text";
-    }
-}
+//        public ImageToTextTask(ModelInfo model, InferenceOptions options)
+//            : base(model, options)
+//        {
+//        }
+
+//        public override string Id => "image-to-text";
+//    }
+//}

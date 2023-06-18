@@ -1,14 +1,18 @@
-using HuggingFace.Hub;
+//using HuggingFace.Hub;
+//using UnityEngine.Scripting;
 
-namespace HuggingFace.Inference.Multimodal.VisualQuestionAnswering
-{
-    public class VisualQuestionAnsweringTask : InferenceTask
-    {
-        public VisualQuestionAnsweringTask(ModelInfo model, InferenceOptions options)
-            : base(model, options)
-        {
-        }
+//namespace HuggingFace.Inference.Multimodal.VisualQuestionAnswering
+//{
+//    public class VisualQuestionAnsweringTask : InferenceTask
+//    {
+//        [Preserve]
+//        public VisualQuestionAnsweringTask() { }
 
-        public override string Id => "visual-question-answering";
-    }
-}
+//        public VisualQuestionAnsweringTask(ModelInfo model, InferenceOptions options)
+//            : base(model, options)
+//        {
+//        }
+
+//        public override string Id => "visual-question-answering";
+//    }
+//}

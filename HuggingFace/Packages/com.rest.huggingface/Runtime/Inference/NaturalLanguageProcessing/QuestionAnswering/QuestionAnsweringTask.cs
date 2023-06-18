@@ -2,12 +2,14 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.QuestionAnswering
 {
     public sealed class QuestionAnsweringTask : BaseJsonPayloadInferenceTask
     {
-        internal QuestionAnsweringTask() { }
+        [Preserve]
+        public QuestionAnsweringTask() { }
 
         public QuestionAnsweringTask(QuestionAnsweringInput input, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

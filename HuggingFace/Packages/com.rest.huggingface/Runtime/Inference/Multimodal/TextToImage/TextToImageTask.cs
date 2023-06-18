@@ -2,12 +2,14 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.Multimodal.TextToImage
 {
     public sealed class TextToImageTask : BaseJsonPayloadInferenceTask
     {
-        internal TextToImageTask() { }
+        [Preserve]
+        public TextToImageTask() { }
 
         public TextToImageTask(TextToImageInputs inputs, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

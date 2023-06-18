@@ -32,7 +32,7 @@ namespace HuggingFace.Inference
                 throw new ArgumentNullException(nameof(task));
             }
 
-            task.Model ??= await client.HubEndpoint.GetRecommendedModelAsync(task.Id, cancellationToken);
+            task.Model ??= await client.HubEndpoint.GetRecommendedModelAsync<TTask>(cancellationToken);
 
             if (string.IsNullOrWhiteSpace(task.Model?.ModelId))
             {

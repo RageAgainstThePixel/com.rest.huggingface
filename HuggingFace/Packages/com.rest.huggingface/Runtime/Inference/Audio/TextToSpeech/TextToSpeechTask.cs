@@ -2,12 +2,14 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.Audio
 {
     public sealed class TextToSpeechTask : BaseJsonPayloadInferenceTask
     {
-        internal TextToSpeechTask() { }
+        [Preserve]
+        public TextToSpeechTask() { }
 
         public TextToSpeechTask(string input, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

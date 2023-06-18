@@ -1,10 +1,10 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using HuggingFace.Hub;
+using HuggingFace.Inference.ComputerVision;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using HuggingFace.Hub;
-using HuggingFace.Inference.ComputerVision;
 
 namespace HuggingFace.Inference
 {
