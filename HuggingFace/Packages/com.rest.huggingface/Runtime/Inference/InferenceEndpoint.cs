@@ -82,7 +82,17 @@ namespace HuggingFace.Inference
                             throw;
                         }
 
-                        var error = JsonConvert.DeserializeObject<HuggingFaceError>(restEx.Response.Error);
+                        HuggingFaceError error;
+
+                        try
+                        {
+                            error = JsonConvert.DeserializeObject<HuggingFaceError>(restEx.Response.Error);
+                        }
+                        catch (Exception)
+                        {
+                            throw restEx;
+                        }
+
                         await new WaitForSeconds((float)error.EstimatedTime);
                         response = await CallEndpointAsync();
                     }
