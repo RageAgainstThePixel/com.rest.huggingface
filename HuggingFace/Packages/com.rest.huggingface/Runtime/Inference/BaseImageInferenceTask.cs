@@ -4,25 +4,26 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using HuggingFace.Hub;
+using HuggingFace.Inference.ComputerVision;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference
 {
-    public abstract class BaseAudioInferenceTask : InferenceTask
+    public abstract class BaseImageInferenceTask : InferenceTask
     {
-        protected BaseAudioInferenceTask() { }
+        protected BaseImageInferenceTask() { }
 
-        protected BaseAudioInferenceTask(SingleSourceAudioInput input, ModelInfo model, InferenceOptions options)
+        protected BaseImageInferenceTask(SingleSourceImageInput input, ModelInfo model, InferenceOptions options)
             : base(model, options)
         {
             Input = input;
         }
 
-        public SingleSourceAudioInput Input { get; }
+        public SingleSourceImageInput Input { get; }
 
         public override async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken = default)
         {
             await using var memoryStream = new MemoryStream();
-            await Input.Audio.CopyToAsync(memoryStream, cancellationToken);
+            await Input.Image.CopyToAsync(memoryStream, cancellationToken);
             return memoryStream.ToArray();
         }
     }

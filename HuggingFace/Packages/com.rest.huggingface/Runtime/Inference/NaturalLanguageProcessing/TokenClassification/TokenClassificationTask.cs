@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -6,8 +8,10 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TokenClassification
 {
     public sealed class TokenClassificationTask : BaseJsonPayloadInferenceTask
     {
+        internal TokenClassificationTask() { }
+
         public TokenClassificationTask(OneOrMoreOf<string> input, TokenClassificationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
-            : base(model ?? new ModelInfo("dbmdz/bert-large-cased-finetuned-conll03-english"), options)
+            : base(model, options)
         {
             Input = input.Values;
             Parameters = parameters;

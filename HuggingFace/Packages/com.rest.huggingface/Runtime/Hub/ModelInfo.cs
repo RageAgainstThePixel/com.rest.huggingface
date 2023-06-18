@@ -11,16 +11,7 @@ namespace HuggingFace.Hub
     {
         public ModelInfo(string modelId)
         {
-            if (modelId.Contains('/'))
-            {
-                var parts = modelId.Split('/');
-                Author = parts[0];
-                ModelId = parts[1];
-            }
-            else
-            {
-                ModelId = modelId;
-            }
+            ModelId = modelId;
         }
 
         [JsonConstructor]
@@ -46,8 +37,8 @@ namespace HuggingFace.Hub
             [JsonProperty("spaces")] List<string> spaces,
             [JsonProperty("siblings")] List<Sibling> siblings,
             [JsonProperty("securityStatus")] SecurityStatus securityStatus)
+            : this(modelId)
         {
-            ModelId = modelId;
             Author = author;
             Sha = sha;
             LastModified = lastModified;
@@ -74,7 +65,7 @@ namespace HuggingFace.Hub
 
         public static implicit operator string(ModelInfo modelInfo) => modelInfo.ToString();
 
-        public override string ToString() => string.IsNullOrWhiteSpace(Author) ? ModelId : $"{Author}/{ModelId}";
+        public override string ToString() => ModelId;
 
         [JsonProperty("modelId")]
         public string ModelId { get; }
