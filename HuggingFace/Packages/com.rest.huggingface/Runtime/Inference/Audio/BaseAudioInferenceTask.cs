@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +9,8 @@ namespace HuggingFace.Inference.Audio
 {
     public abstract class BaseAudioInferenceTask : InferenceTask
     {
+        protected BaseAudioInferenceTask() { }
+
         protected BaseAudioInferenceTask(SingleSourceAudioInput input, ModelInfo model, InferenceOptions options)
             : base(model, options)
         {

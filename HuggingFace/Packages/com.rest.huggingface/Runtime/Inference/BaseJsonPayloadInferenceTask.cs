@@ -5,6 +5,8 @@ namespace HuggingFace.Inference
 {
     public abstract class BaseJsonPayloadInferenceTask : InferenceTask
     {
+        protected BaseJsonPayloadInferenceTask() { }
+
         protected BaseJsonPayloadInferenceTask(ModelInfo model, InferenceOptions options)
             : base(model, options)
         {

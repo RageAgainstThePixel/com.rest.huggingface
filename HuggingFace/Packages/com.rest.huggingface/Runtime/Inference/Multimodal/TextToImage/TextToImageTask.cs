@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 
@@ -5,8 +7,10 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
 {
     public sealed class TextToImageTask : BaseJsonPayloadInferenceTask
     {
-        public TextToImageTask(TextToImageInputs inputs, ModelInfo model, InferenceOptions options = null)
-            : base(model ?? new ModelInfo("stabilityai/stable-diffusion-2-1"), options)
+        internal TextToImageTask() { }
+
+        public TextToImageTask(TextToImageInputs inputs, ModelInfo model = null, InferenceOptions options = null)
+            : base(model, options)
         {
             Inputs = inputs;
         }

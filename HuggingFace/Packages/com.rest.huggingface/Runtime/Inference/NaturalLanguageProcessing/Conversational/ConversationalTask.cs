@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 
@@ -5,8 +7,10 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.Conversational
 {
     public sealed class ConversationalTask : BaseJsonPayloadInferenceTask
     {
+        internal ConversationalTask() { }
+
         public ConversationalTask(Conversation input, ConversationalParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
-            : base(model ?? new ModelInfo("microsoft/DialoGPT-large"), options)
+            : base(model, options)
         {
             Input = input;
             Parameters = parameters;

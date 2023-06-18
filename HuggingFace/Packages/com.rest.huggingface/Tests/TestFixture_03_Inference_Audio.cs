@@ -1,4 +1,5 @@
-using HuggingFace.Hub;
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Inference.Audio;
 using HuggingFace.Inference.Audio.AudioClassification;
 using HuggingFace.Inference.Audio.AudioToAudio;
@@ -22,11 +23,10 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var model = new ModelInfo("jonatasgrosman/wav2vec2-large-xlsr-53-english");
             var audioPath = AssetDatabase.GUIDToAssetPath("900a512d644c38c47846d9a6e41961f6");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
-            var task = new AutomaticSpeechRecognitionTask(input, model: model);
+            var task = new AutomaticSpeechRecognitionTask(input);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AutomaticSpeechRecognitionTask, AutomaticSpeechRecognitionResponse>(task);
             Assert.IsNotNull(result);
             Assert.IsFalse(string.IsNullOrWhiteSpace(result.Result));
@@ -38,11 +38,10 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var model = new ModelInfo("speechbrain/google_speech_command_xvector");
             var audioPath = AssetDatabase.GUIDToAssetPath("6b684332a20988c45933a5a73b22c429");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
-            var task = new AudioClassificationTask(input, model);
+            var task = new AudioClassificationTask(input);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioClassificationTask, AudioClassificationResponse>(task);
             Assert.IsNotNull(result);
             Assert.IsNotEmpty(result.Results);
@@ -58,8 +57,7 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var model = new ModelInfo("facebook/fastspeech2-en-ljspeech");
-            var task = new TextToSpeechTask("This is a test run", model);
+            var task = new TextToSpeechTask("This is a test run");
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.AudioClip);
@@ -71,11 +69,10 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var model = new ModelInfo("speechbrain/sepformer-wham");
             var audioPath = AssetDatabase.GUIDToAssetPath("07d1a9fd7238ed941af19229414ce747");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
-            var task = new AudioToAudioTask(input, model);
+            var task = new AudioToAudioTask(input);
             var result = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioToAudioTask, AudioToAudioResponse>(task);
             Assert.IsNotNull(result);
             Assert.IsNotEmpty(result.Results);

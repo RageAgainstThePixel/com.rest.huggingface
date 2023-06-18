@@ -1,5 +1,6 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using NUnit.Framework;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -18,7 +19,20 @@ namespace HuggingFace.Tests
         }
 
         [Test]
-        public async Task Test_02_Models()
+        public async Task Test_02_Tasks()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.HubEndpoint);
+            var tasks = await api.HubEndpoint.GetAllTasksAsync();
+
+            foreach (var (task, taskInfo) in tasks)
+            {
+                Debug.Log($"{task} | {string.Join("| ", taskInfo.WidgetModels)}");
+            }
+        }
+
+        [Test]
+        public async Task Test_03_Models()
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.HubEndpoint);
@@ -30,13 +44,18 @@ namespace HuggingFace.Tests
             {
                 Debug.Log($"{pipelineTag.Id} | {pipelineTag.Label} | {pipelineTag.SubType}");
 
-                var recommendedModels = await api.InferenceEndpoint.GetRecommendedModelsAsync(pipelineTag);
-                var recommendedModel = recommendedModels.FirstOrDefault(info => !info.Private && !info.Disabled);
-                Assert.IsNotNull(recommendedModel);
+                var recommendedModel = await api.HubEndpoint.GetRecommendedModelAsync(pipelineTag);
+
+                if (recommendedModel == null)
+                {
+                    Debug.LogWarning($"{pipelineTag} does not have a recommended model");
+                }
+
+                var recommendedModels = await api.HubEndpoint.GetRecommendedModelsAsync(pipelineTag);
 
                 foreach (var model in recommendedModels)
                 {
-                    Debug.Log($"-->  {model.ModelId} | Likes: {model.Likes}");
+                    Debug.Log($"-->  {model} | Likes: {model.Likes}");
 
                     if (!string.IsNullOrWhiteSpace(model.Config?.TaskSpecificParams?.ToString()))
                     {

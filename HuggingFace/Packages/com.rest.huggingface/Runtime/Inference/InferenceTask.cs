@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System;
@@ -8,14 +10,10 @@ namespace HuggingFace.Inference
 {
     public abstract class InferenceTask
     {
+        protected InferenceTask() { }
+
         protected InferenceTask(ModelInfo model, InferenceOptions options)
         {
-            if (model == null ||
-                string.IsNullOrWhiteSpace(model.ModelId))
-            {
-                throw new ArgumentNullException(nameof(model));
-            }
-
             Model = model;
             Options = options ?? new InferenceOptions();
         }
@@ -24,7 +22,7 @@ namespace HuggingFace.Inference
         public abstract string Id { get; }
 
         [JsonIgnore]
-        public ModelInfo Model { get; }
+        public ModelInfo Model { get; internal set; }
 
         [JsonProperty("options")]
         public InferenceOptions Options { get; }
