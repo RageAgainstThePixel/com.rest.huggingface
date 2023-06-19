@@ -2,12 +2,12 @@
 
 using Newtonsoft.Json;
 
-namespace HuggingFace.Inference.Multimodal.VisualQuestionAnswering
+namespace HuggingFace.Inference.Multimodal
 {
-    public sealed class VisualQuestionAnsweringResult
+    public sealed class QuestionAnsweringResult
     {
         [JsonConstructor]
-        public VisualQuestionAnsweringResult(
+        public QuestionAnsweringResult(
             [JsonProperty("score")] double score,
             [JsonProperty("answer")] string answer
         )

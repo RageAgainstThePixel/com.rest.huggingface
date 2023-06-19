@@ -1,27 +1,27 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UnityEngine;
 
-namespace HuggingFace.Inference.Multimodal.VisualQuestionAnswering
+namespace HuggingFace.Inference.Multimodal
 {
-    public sealed class VisualQuestionAnsweringInput : SingleSourceImageInput
+    public sealed class SingleSourceQuestionAnsweringInput : SingleSourceImageInput
     {
-        public VisualQuestionAnsweringInput(string question, string imagePath) : base(imagePath)
+        public SingleSourceQuestionAnsweringInput(string question, string imagePath) : base(imagePath)
         {
             Question = question;
         }
 
-        public VisualQuestionAnsweringInput(string question, Texture2D image) : base(image)
+        public SingleSourceQuestionAnsweringInput(string question, Texture2D image) : base(image)
         {
             Question = question;
         }
 
-        public VisualQuestionAnsweringInput(string question, Stream image, string imageName) : base(image, imageName)
+        public SingleSourceQuestionAnsweringInput(string question, Stream image, string imageName) : base(image, imageName)
         {
             Question = question;
         }
