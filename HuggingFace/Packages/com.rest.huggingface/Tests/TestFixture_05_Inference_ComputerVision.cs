@@ -83,5 +83,20 @@ namespace HuggingFace.Tests
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Image);
         }
+
+
+        //[Test]
+        //public async Task Test_05_DepthEstimation()
+        //{
+        //    var api = new HuggingFaceClient();
+        //    Assert.IsNotNull(api.InferenceEndpoint);
+        //    var imagePath = AssetDatabase.GUIDToAssetPath("0a718d44a1e578148be9a75238a1faaf");
+        //    var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(imagePath);
+        //    using var input = new SingleSourceImageInput(texture);
+        //    var task = new DepthEstimationTask(input, "Intel/dpt-large");
+        //    var response = await api.InferenceEndpoint.RunInferenceTaskAsync<DepthEstimationTask, DepthEstimationResult>(task);
+        //    Assert.IsNotNull(response);
+        //    Assert.IsNotNull(response.Image);
+        //}
     }
 }

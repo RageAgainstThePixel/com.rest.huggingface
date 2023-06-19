@@ -5,13 +5,13 @@
 
 //namespace HuggingFace.Inference.ComputerVision.DepthEstimation
 //{
-//    public class DepthEstimationTask : InferenceTask
+//    public sealed class DepthEstimationTask : BaseImageInferenceTask
 //    {
 //        [Preserve]
 //        public DepthEstimationTask() { }
 
-//        public DepthEstimationTask(ModelInfo model, InferenceOptions options)
-//            : base(model, options)
+//        public DepthEstimationTask(SingleSourceImageInput input, ModelInfo model = null, InferenceOptions options = null)
+//            : base(input, model, options)
 //        {
 //        }
 

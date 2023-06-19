@@ -74,9 +74,9 @@ namespace HuggingFace.Tests
 
             foreach (var (taskId, taskInfo) in taskList)
             {
-                var widgetCount = taskInfo.WidgetModels.Count;
+                var recommendedModel = await api.HubEndpoint.GetRecommendedModelAsync(taskId);
 
-                if (widgetCount > 0)
+                if (recommendedModel != null)
                 {
                     if (!implementedTasks.TryGetValue(taskId, out var instance))
                     {
@@ -84,7 +84,7 @@ namespace HuggingFace.Tests
                     }
                     else
                     {
-                        Debug.Log($"{taskId} | {instance.GetType()} | {string.Join("| ", taskInfo.WidgetModels)}");
+                        Debug.Log($"{taskId} | {instance.GetType()} | {recommendedModel}");
                     }
                 }
                 else
