@@ -8,9 +8,9 @@ namespace HuggingFace.Inference.Audio.AudioClassification
         public AudioClassificationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)
         {
-            Results = JsonConvert.DeserializeObject<IReadOnlyList<AudioClassificationResults>>(content, settings);
+            Results = JsonConvert.DeserializeObject<IReadOnlyList<ScoreResults>>(content, settings);
         }
 
-        public IReadOnlyList<AudioClassificationResults> Results { get; }
+        public IReadOnlyList<ScoreResults> Results { get; }
     }
 }

@@ -94,7 +94,7 @@ namespace HuggingFace.Inference
                             throw restEx;
                         }
 
-                        await new WaitForSeconds((float)error.EstimatedTime);
+                        await Task.Delay(TimeSpan.FromSeconds(error.EstimatedTime), cancellationToken);
                         response = await CallEndpointAsync();
                     }
                     else

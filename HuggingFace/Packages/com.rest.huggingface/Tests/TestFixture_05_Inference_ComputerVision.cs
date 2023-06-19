@@ -5,13 +5,20 @@ using HuggingFace.Inference.ComputerVision.ImageClassification;
 using HuggingFace.Inference.ComputerVision.ImageSegmentation;
 using HuggingFace.Inference.ComputerVision.ImageToImage;
 using HuggingFace.Inference.ComputerVision.ObjectDetection;
+using HuggingFace.Inference.ComputerVision.ZeroShotImageClassification;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
 namespace HuggingFace.Tests
 {
+    /// <summary>
+    /// Test class for Accelerated Inference APIs for Audio processing
+    /// A list of tasks and their detailed parameters can be found:
+    /// https://huggingface.co/docs/api-inference/detailed_parameters#computer-vision
+    /// </summary>
     internal class TestFixture_05_Inference_ComputerVision
     {
         [Test]
@@ -84,9 +91,32 @@ namespace HuggingFace.Tests
             Assert.IsNotNull(response.Image);
         }
 
+        [Test]
+        public async Task Test_05_ZeroShotImageClassification()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var imagePath = AssetDatabase.GUIDToAssetPath("4a5097f9cedc0f44a85354f1dd7368dd");
+            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(imagePath);
+            var candidateLabels = new List<string>
+            {
+                "playing music",
+                "playing sports"
+            };
+            var parameters = new ZeroShotClassificationParameters(candidateLabels);
+            using var input = new SingleSourceImageInput(texture);
+            var task = new ZeroShotImageClassificationTask(input, parameters);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<ZeroShotImageClassificationTask, ZeroShotImageClassificationResponse>(task);
+            Assert.IsNotNull(response);
+
+            foreach (var result in response.Results)
+            {
+                Debug.Log($"{result.Label} {result.Score}");
+            }
+        }
 
         //[Test]
-        //public async Task Test_05_DepthEstimation()
+        //public async Task Test_XX_DepthEstimation()
         //{
         //    var api = new HuggingFaceClient();
         //    Assert.IsNotNull(api.InferenceEndpoint);

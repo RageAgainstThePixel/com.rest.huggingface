@@ -1,6 +1,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using HuggingFace.Hub;
+using HuggingFace.Inference;
 using HuggingFace.Inference.NaturalLanguageProcessing;
 using HuggingFace.Inference.NaturalLanguageProcessing.Conversational;
 using HuggingFace.Inference.NaturalLanguageProcessing.FillMask;
