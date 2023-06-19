@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using UnityEngine;
 
-namespace HuggingFace.Inference.ComputerVision
+namespace HuggingFace.Inference
 {
     public sealed class SingleSourceImageInput : IDisposable
     {

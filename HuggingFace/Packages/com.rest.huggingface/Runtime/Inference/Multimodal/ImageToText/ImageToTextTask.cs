@@ -1,18 +1,20 @@
-//using HuggingFace.Hub;
-//using UnityEngine.Scripting;
+// Licensed under the MIT License. See LICENSE in the project root for license information.
 
-//namespace HuggingFace.Inference.Multimodal.ImageToText
-//{
-//    public class ImageToTextTask : InferenceTask
-//    {
-//        [Preserve]
-//        public ImageToTextTask() { }
+using HuggingFace.Hub;
+using UnityEngine.Scripting;
 
-//        public ImageToTextTask(ModelInfo model, InferenceOptions options)
-//            : base(model, options)
-//        {
-//        }
+namespace HuggingFace.Inference.Multimodal.ImageToText
+{
+    public sealed class ImageToTextTask : BaseImageInferenceTask
+    {
+        [Preserve]
+        public ImageToTextTask() { }
 
-//        public override string Id => "image-to-text";
-//    }
-//}
+        public ImageToTextTask(SingleSourceImageInput input, ModelInfo model = null, InferenceOptions options = null)
+            : base(input, model, options)
+        {
+        }
+
+        public override string Id => "image-to-text";
+    }
+}

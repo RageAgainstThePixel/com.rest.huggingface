@@ -39,7 +39,6 @@ namespace HuggingFace.Tests
                                         typeof(InferenceTask).IsAssignableFrom(type))
                      select type)
             {
-                Debug.Log(type.Name);
                 InferenceTask instance;
 
                 try

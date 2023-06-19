@@ -1,7 +1,6 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using HuggingFace.Hub;
-using HuggingFace.Inference.ComputerVision;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace HuggingFace.Inference
 
         public SingleSourceImageInput Input { get; }
 
-        public override async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken = default)
+        public override async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken)
         {
             await using var memoryStream = new MemoryStream();
             await Input.Image.CopyToAsync(memoryStream, cancellationToken);

@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using System;
 using System.IO;
 using System.Threading;
@@ -5,9 +7,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Utilities.WebRequestRest;
 
-namespace HuggingFace.Inference.Multimodal.TextToImage
+namespace HuggingFace.Inference.ComputerVision.ImageToImage
 {
-    public sealed class TextToImageResponse : BinaryInferenceTaskResponse
+    public sealed class ImageToImageResponse : BinaryInferenceTaskResponse
     {
         public string CachedPath { get; private set; }
 

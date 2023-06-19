@@ -3,6 +3,7 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -47,25 +48,25 @@ namespace HuggingFace.Inference
             {
                 try
                 {
-                    if (typeof(BaseJsonPayloadInferenceTask).IsAssignableFrom(typeof(TTask)))
-                    {
-                        var jsonData = task.ToJson(client.JsonSerializationOptions);
+                    var jsonData = await task.ToJsonAsync(client.JsonSerializationOptions, cancellationToken).ConfigureAwait(true);
 
+                    if (!string.IsNullOrWhiteSpace(jsonData))
+                    {
                         if (EnableLogging)
                         {
                             Debug.Log(jsonData);
                         }
 
                         response = await Rest.PostAsync(endpoint, jsonData, parameters: new RestParameters(client.DefaultRequestHeaders, timeout: Timeout), cancellationToken);
-                        response.Validate(EnableLogging);
                     }
                     else
                     {
                         var byteData = await task.ToByteArrayAsync(cancellationToken);
-                        // DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("audio/wav"));
+                        // TODO ensure proper accept headers are set here
                         response = await Rest.PostAsync(endpoint, byteData, parameters: new RestParameters(client.DefaultRequestHeaders, timeout: Timeout), cancellationToken);
-                        response.Validate(EnableLogging);
                     }
+
+                    response.Validate(EnableLogging);
                 }
                 catch (RestException restEx)
                 {
@@ -74,7 +75,7 @@ namespace HuggingFace.Inference
                     {
                         if (EnableLogging)
                         {
-                            Debug.Log(restEx);
+                            Debug.LogWarning($"Waiting for model, attempt {attempt} of {MaxRetryAttempts}\n{restEx}");
                         }
 
                         if (++attempt == MaxRetryAttempts)
@@ -88,8 +89,9 @@ namespace HuggingFace.Inference
                         {
                             error = JsonConvert.DeserializeObject<HuggingFaceError>(restEx.Response.Error);
                         }
-                        catch (Exception)
+                        catch (JsonSerializationException jsonEx)
                         {
+                            Debug.LogError($"Failed to parse error response: \"restEx.Response.Error\"\n{jsonEx.Message}");
                             throw restEx;
                         }
 
