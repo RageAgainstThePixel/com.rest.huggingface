@@ -5,24 +5,17 @@ using UnityEngine;
 
 namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
 {
-    public sealed class ImageSegmentationResult
+    public sealed class ImageSegmentationResult : ScoreResults
     {
         [JsonConstructor]
         public ImageSegmentationResult(
             [JsonProperty("score")] double score,
             [JsonProperty("label")] string label,
             [JsonProperty("mask")] string blob)
+            : base(label, score)
         {
-            Score = score;
-            Label = label;
             Blob = blob;
         }
-
-        [JsonProperty("score")]
-        public double Score { get; }
-
-        [JsonProperty("label")]
-        public string Label { get; }
 
         [JsonProperty("mask")]
         public string Blob { get; }

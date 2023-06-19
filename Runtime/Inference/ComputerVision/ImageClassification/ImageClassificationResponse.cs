@@ -1,7 +1,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace HuggingFace.Inference.ComputerVision.ImageClassification
 {
@@ -9,9 +9,9 @@ namespace HuggingFace.Inference.ComputerVision.ImageClassification
     {
         public ImageClassificationResponse(string content, JsonSerializerSettings settings) : base(content, settings)
         {
-            Results = JsonConvert.DeserializeObject<IReadOnlyList<ImageClassificationResult>>(content, settings);
+            Results = JsonConvert.DeserializeObject<IReadOnlyList<ScoreResults>>(content, settings);
         }
 
-        public IReadOnlyList<ImageClassificationResult> Results { get; }
+        public IReadOnlyList<ScoreResults> Results { get; }
     }
 }

@@ -1,11 +1,13 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using Newtonsoft.Json;
 
-namespace HuggingFace.Inference.Audio.AudioClassification
+namespace HuggingFace.Inference
 {
-    public sealed class AudioClassificationResults
+    public class ScoreResults
     {
         [JsonConstructor]
-        public AudioClassificationResults(
+        public ScoreResults(
             [JsonProperty("label")] string label,
             [JsonProperty("score")] double score)
         {

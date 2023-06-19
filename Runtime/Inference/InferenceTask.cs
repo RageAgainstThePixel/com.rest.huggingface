@@ -27,10 +27,10 @@ namespace HuggingFace.Inference
         [JsonProperty("options")]
         public InferenceOptions Options { get; }
 
-        public virtual string ToJson(JsonSerializerSettings settings)
-            => string.Empty;
+        public virtual Task<string> ToJsonAsync(JsonSerializerSettings settings, CancellationToken cancellationToken)
+            => Task.FromResult(string.Empty);
 
-        public virtual async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken)
             => await Task.FromResult(Array.Empty<byte>());
 
         public override string ToString() => Id;

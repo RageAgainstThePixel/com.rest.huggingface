@@ -2,12 +2,14 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.SentenceSimilarity
 {
     public sealed class SentenceSimilarityTask : BaseJsonPayloadInferenceTask
     {
-        internal SentenceSimilarityTask() { }
+        [Preserve]
+        public SentenceSimilarityTask() { }
 
         public SentenceSimilarityTask(SentenceSimilarityInput input, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

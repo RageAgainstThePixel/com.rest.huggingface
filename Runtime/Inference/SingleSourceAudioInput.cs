@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using Utilities.Encoding.Wav;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference
 {
     public sealed class SingleSourceAudioInput : IDisposable
     {

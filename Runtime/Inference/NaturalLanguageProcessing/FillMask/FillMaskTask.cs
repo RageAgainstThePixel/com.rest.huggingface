@@ -3,12 +3,14 @@
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.FillMask
 {
     public sealed class FillMaskTask : BaseJsonPayloadInferenceTask
     {
-        internal FillMaskTask() { }
+        [Preserve]
+        public FillMaskTask() { }
 
         public FillMaskTask(OneOrMoreOf<string> input, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

@@ -2,12 +2,14 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
 {
     public sealed class TextGenerationTask : BaseJsonPayloadInferenceTask
     {
-        internal TextGenerationTask() { }
+        [Preserve]
+        public TextGenerationTask() { }
 
         public TextGenerationTask(string input, TextGenerationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

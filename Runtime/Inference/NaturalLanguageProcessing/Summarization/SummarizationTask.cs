@@ -3,12 +3,14 @@
 using System.Collections.Generic;
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing
 {
     public sealed class SummarizationTask : BaseJsonPayloadInferenceTask
     {
-        internal SummarizationTask() { }
+        [Preserve]
+        public SummarizationTask() { }
 
         public override string Id => "summarization";
 

@@ -3,12 +3,14 @@
 using System.Collections.Generic;
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.Translation
 {
     public sealed class TranslationTask : BaseJsonPayloadInferenceTask
     {
-        internal TranslationTask() { }
+        [Preserve]
+        public TranslationTask() { }
 
         public TranslationTask(OneOrMoreOf<string> input, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

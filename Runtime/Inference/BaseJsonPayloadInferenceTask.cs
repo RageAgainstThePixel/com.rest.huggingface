@@ -2,6 +2,8 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HuggingFace.Inference
 {
@@ -9,12 +11,9 @@ namespace HuggingFace.Inference
     {
         protected BaseJsonPayloadInferenceTask() { }
 
-        protected BaseJsonPayloadInferenceTask(ModelInfo model, InferenceOptions options)
-            : base(model, options)
-        {
-        }
+        protected BaseJsonPayloadInferenceTask(ModelInfo model, InferenceOptions options) : base(model, options) { }
 
-        public override string ToJson(JsonSerializerSettings settings)
-            => JsonConvert.SerializeObject(this, settings);
+        public override Task<string> ToJsonAsync(JsonSerializerSettings settings, CancellationToken cancellationToken)
+            => Task.FromResult(JsonConvert.SerializeObject(this, settings));
     }
 }
