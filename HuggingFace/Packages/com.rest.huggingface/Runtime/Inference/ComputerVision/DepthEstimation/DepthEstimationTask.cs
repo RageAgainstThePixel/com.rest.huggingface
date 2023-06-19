@@ -1,14 +1,20 @@
-using HuggingFace.Hub;
+//// Licensed under the MIT License. See LICENSE in the project root for license information.
 
-namespace HuggingFace.Inference.ComputerVision.DepthEstimation
-{
-    public class DepthEstimationTask : InferenceTask
-    {
-        public DepthEstimationTask(ModelInfo model, InferenceOptions options)
-            : base(model, options)
-        {
-        }
+//using HuggingFace.Hub;
+//using UnityEngine.Scripting;
 
-        public override string Id => "depth-estimation";
-    }
-}
+//namespace HuggingFace.Inference.ComputerVision.DepthEstimation
+//{
+//    public sealed class DepthEstimationTask : BaseImageInferenceTask
+//    {
+//        [Preserve]
+//        public DepthEstimationTask() { }
+
+//        public DepthEstimationTask(SingleSourceImageInput input, ModelInfo model = null, InferenceOptions options = null)
+//            : base(input, model, options)
+//        {
+//        }
+
+//        public override string Id => "depth-estimation";
+//    }
+//}

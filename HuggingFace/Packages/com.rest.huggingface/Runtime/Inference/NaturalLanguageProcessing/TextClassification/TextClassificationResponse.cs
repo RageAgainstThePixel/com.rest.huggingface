@@ -8,9 +8,9 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TextClassification
         public TextClassificationResponse(string content, JsonSerializerSettings settings)
             : base(content, settings)
         {
-            Results = JsonConvert.DeserializeObject<IReadOnlyList<IReadOnlyList<TextClassificationResult>>>(content, settings);
+            Results = JsonConvert.DeserializeObject<IReadOnlyList<IReadOnlyList<ScoreResults>>>(content, settings);
         }
 
-        public IReadOnlyList<IReadOnlyList<TextClassificationResult>> Results { get; }
+        public IReadOnlyList<IReadOnlyList<ScoreResults>> Results { get; }
     }
 }

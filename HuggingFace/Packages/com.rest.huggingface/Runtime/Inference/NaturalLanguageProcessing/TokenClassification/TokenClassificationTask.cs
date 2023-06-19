@@ -3,12 +3,14 @@
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TokenClassification
 {
     public sealed class TokenClassificationTask : BaseJsonPayloadInferenceTask
     {
-        internal TokenClassificationTask() { }
+        [Preserve]
+        public TokenClassificationTask() { }
 
         public TokenClassificationTask(OneOrMoreOf<string> input, TokenClassificationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

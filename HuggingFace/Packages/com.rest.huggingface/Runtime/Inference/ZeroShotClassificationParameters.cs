@@ -1,8 +1,10 @@
-using System.Collections.Generic;
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace HuggingFace.Inference.NaturalLanguageProcessing.ZeroShotClassification
+namespace HuggingFace.Inference
 {
     public sealed class ZeroShotClassificationParameters
     {

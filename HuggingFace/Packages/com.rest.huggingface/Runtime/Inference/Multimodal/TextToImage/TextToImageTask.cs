@@ -2,12 +2,16 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.Multimodal.TextToImage
 {
     public sealed class TextToImageTask : BaseJsonPayloadInferenceTask
     {
-        internal TextToImageTask() { }
+        [Preserve]
+        public TextToImageTask() { }
 
         public TextToImageTask(TextToImageInputs inputs, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)
@@ -19,7 +23,7 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
 
         public override string Id => "text-to-image";
 
-        public override string ToJson(JsonSerializerSettings settings)
-            => JsonConvert.SerializeObject(Inputs, settings);
+        public override Task<string> ToJsonAsync(JsonSerializerSettings settings, CancellationToken cancellationToken)
+            => Task.FromResult(JsonConvert.SerializeObject(Inputs, settings));
     }
 }

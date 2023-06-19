@@ -3,7 +3,7 @@
   "displayName": "HuggingFace",
   "description": "A Non-Official HuggingFace Rest Client for Unity (UPM)",
   "keywords": [],
-  "version": "1.0.0-preview.7",
+  "version": "1.0.0-preview.8",
   "unity": "2021.3",
   "documentationUrl": "https://github.com/RageAgainstThePixel/com.rest.huggingface#documentation",
   "changelogUrl": "https://github.com/RageAgainstThePixel/com.rest.huggingface/releases",

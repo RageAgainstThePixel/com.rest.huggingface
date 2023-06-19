@@ -2,12 +2,14 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.Conversational
 {
     public sealed class ConversationalTask : BaseJsonPayloadInferenceTask
     {
-        internal ConversationalTask() { }
+        [Preserve]
+        public ConversationalTask() { }
 
         public ConversationalTask(Conversation input, ConversationalParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
             : base(model, options)

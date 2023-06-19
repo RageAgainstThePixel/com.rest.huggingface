@@ -4,25 +4,17 @@ using Newtonsoft.Json;
 
 namespace HuggingFace.Inference.ComputerVision.ObjectDetection
 {
-    public sealed class ObjectDetectionResult
+    public sealed class ObjectDetectionResult : ScoreResults
     {
         [JsonConstructor]
         public ObjectDetectionResult(
             [JsonProperty("score")] double score,
             [JsonProperty("label")] string label,
-            [JsonProperty("box")] ObjectDetectionBox box
-        )
+            [JsonProperty("box")] ObjectDetectionBox box)
+            : base(label, score)
         {
-            Score = score;
-            Label = label;
             Box = box;
         }
-
-        [JsonProperty("score")]
-        public double Score { get; }
-
-        [JsonProperty("label")]
-        public string Label { get; }
 
         [JsonProperty("box")]
         public ObjectDetectionBox Box { get; }

@@ -3,12 +3,14 @@
 using HuggingFace.Hub;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextClassification
 {
     public sealed class TextClassificationTask : BaseJsonPayloadInferenceTask
     {
-        internal TextClassificationTask() { }
+        [Preserve]
+        public TextClassificationTask() { }
 
         public TextClassificationTask(OneOrMoreOf<string> input, ModelInfo model = null, InferenceOptions options = null)
             : base(model ?? new ModelInfo("distilbert-base-uncased-finetuned-sst-2-english"), options)
