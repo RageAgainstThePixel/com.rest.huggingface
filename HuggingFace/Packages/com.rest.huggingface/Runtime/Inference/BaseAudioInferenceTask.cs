@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HuggingFace.Hub;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference
 {
     public abstract class BaseAudioInferenceTask : InferenceTask
     {
@@ -19,7 +19,7 @@ namespace HuggingFace.Inference.Audio
 
         public SingleSourceAudioInput Input { get; }
 
-        public override async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken = default)
+        public override async Task<byte[]> ToByteArrayAsync(CancellationToken cancellationToken)
         {
             await using var memoryStream = new MemoryStream();
             await Input.Audio.CopyToAsync(memoryStream, cancellationToken);

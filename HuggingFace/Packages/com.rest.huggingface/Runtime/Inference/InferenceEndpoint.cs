@@ -86,7 +86,7 @@ namespace HuggingFace.Inference
 
                         try
                         {
-                            error = JsonConvert.DeserializeObject<HuggingFaceError>(restEx.Response.Error);
+                            error = JsonConvert.DeserializeObject<HuggingFaceError>(restEx.Response.Body);
                         }
                         catch (JsonSerializationException jsonEx)
                         {
