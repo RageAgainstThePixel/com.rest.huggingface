@@ -4,6 +4,7 @@ using HuggingFace.Inference.Audio;
 using HuggingFace.Inference.Audio.AudioClassification;
 using HuggingFace.Inference.Audio.AudioToAudio;
 using HuggingFace.Inference.Audio.AutomaticSpeechRecognition;
+using HuggingFace.Inference.Audio.TextToSpeech;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using UnityEditor;

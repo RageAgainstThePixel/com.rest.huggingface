@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Utilities.WebRequestRest;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Audio.TextToSpeech
 {
     public sealed class TextToSpeechResponse : BinaryInferenceTaskResponse
     {

@@ -3,6 +3,7 @@
 using HuggingFace.Inference;
 using HuggingFace.Inference.Multimodal.ImageToText;
 using HuggingFace.Inference.Multimodal.TextToImage;
+using HuggingFace.Inference.Multimodal.VisualQuestionAnswering;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -44,6 +45,24 @@ namespace HuggingFace.Tests
             foreach (var result in response.Results)
             {
                 Debug.Log(result.GeneratedText);
+            }
+        }
+
+        [Test]
+        public async Task Test_03_VisualQuestionAnswering()
+        {
+            var api = new HuggingFaceClient();
+            Assert.IsNotNull(api.InferenceEndpoint);
+            var imagePath = AssetDatabase.GUIDToAssetPath("7a9ce68183656254495b680e84a86117");
+            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(imagePath);
+            using var input = new VisualQuestionAnsweringInput("What is in this image?", texture);
+            var task = new VisualQuestionAnsweringTask(input);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<VisualQuestionAnsweringTask, VisualQuestionAnsweringResponse>(task);
+            Assert.IsNotNull(response);
+
+            foreach (var result in response.Results)
+            {
+                Debug.Log($"{result.Score}: {result.Answer}");
             }
         }
     }

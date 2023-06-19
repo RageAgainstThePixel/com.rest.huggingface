@@ -4,7 +4,7 @@ using HuggingFace.Hub;
 using Newtonsoft.Json;
 using UnityEngine.Scripting;
 
-namespace HuggingFace.Inference.Audio
+namespace HuggingFace.Inference.Audio.TextToSpeech
 {
     public sealed class TextToSpeechTask : BaseJsonPayloadInferenceTask
     {

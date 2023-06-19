@@ -2,11 +2,12 @@
 
 using System;
 using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace HuggingFace.Inference
 {
-    public sealed class SingleSourceImageInput : IDisposable
+    public class SingleSourceImageInput : IDisposable
     {
         public SingleSourceImageInput(string imagePath)
             : this(File.OpenRead(imagePath), Path.GetFileName(imagePath))
@@ -33,8 +34,10 @@ namespace HuggingFace.Inference
         ~SingleSourceImageInput()
             => Dispose(false);
 
+        [JsonIgnore]
         public Stream Image { get; }
 
+        [JsonIgnore]
         public string ImageName { get; }
 
         private void Dispose(bool disposing)
