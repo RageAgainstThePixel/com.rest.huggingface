@@ -1,3 +1,5 @@
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
 using System;
 using System.IO;
 using System.Threading;
@@ -28,7 +30,15 @@ namespace HuggingFace.Inference.Audio.TextToSpeech
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                switch (e)
+                {
+                    case TaskCanceledException:
+                    case OperationCanceledException:
+                        throw;
+                    default:
+                        Debug.LogError(e);
+                        break;
+                }
             }
             finally
             {
