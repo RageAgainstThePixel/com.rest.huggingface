@@ -30,7 +30,15 @@ namespace HuggingFace.Inference.ComputerVision.ImageToImage
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                switch (e)
+                {
+                    case TaskCanceledException:
+                    case OperationCanceledException:
+                        throw;
+                    default:
+                        Debug.LogError(e);
+                        break;
+                }
             }
             finally
             {
