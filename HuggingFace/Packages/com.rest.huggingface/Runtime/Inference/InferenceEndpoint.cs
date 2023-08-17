@@ -72,11 +72,6 @@ namespace HuggingFace.Inference
                     if (restEx.Response.Code == 503 &&
                         task.Options.WaitForModel)
                     {
-                        if (EnableLogging)
-                        {
-                            Debug.LogWarning($"Waiting for model, attempt {attempt} of {MaxRetryAttempts}\n{restEx}");
-                        }
-
                         if (++attempt == MaxRetryAttempts)
                         {
                             throw;
@@ -94,7 +89,12 @@ namespace HuggingFace.Inference
                             throw restEx;
                         }
 
-                        await Task.Delay(TimeSpan.FromSeconds(error.EstimatedTime), cancellationToken);
+                        if (EnableLogging)
+                        {
+                            Debug.LogWarning($"Waiting for model for {error.EstimatedTime} seconds... attempt {attempt} of {MaxRetryAttempts}\n{restEx}");
+                        }
+
+                        await Task.Delay(TimeSpan.FromSeconds(error.EstimatedTime), cancellationToken).ConfigureAwait(true);
                         response = await CallEndpointAsync();
                     }
                     else
