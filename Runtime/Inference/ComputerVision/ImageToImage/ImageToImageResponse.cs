@@ -21,7 +21,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageToImage
             var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
             Debug.Log(filePath);
             CachedPath = filePath;
-            var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+            var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
 
             try
             {
@@ -37,7 +37,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageToImage
                         throw;
                     default:
                         Debug.LogError(e);
-                        break;
+                        throw;
                 }
             }
             finally

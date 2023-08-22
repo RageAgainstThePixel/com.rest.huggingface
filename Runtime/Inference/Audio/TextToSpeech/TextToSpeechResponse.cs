@@ -21,7 +21,7 @@ namespace HuggingFace.Inference.Audio.TextToSpeech
             var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.wav");
             Debug.Log(filePath);
             CachedPath = filePath;
-            var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+            var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
 
             try
             {
@@ -37,7 +37,7 @@ namespace HuggingFace.Inference.Audio.TextToSpeech
                         throw;
                     default:
                         Debug.LogError(e);
-                        break;
+                        throw;
                 }
             }
             finally
