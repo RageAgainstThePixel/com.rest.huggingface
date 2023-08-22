@@ -28,8 +28,9 @@ namespace HuggingFace.Tests
                 Width = 1024,
             };
             var task = new TextToImageTask(inputs);
-            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToImageTask, TextToImageResponse>(task);
+            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToImageTask, TextToImageBinaryResponse>(task);
             Assert.IsNotNull(response);
+            Debug.Log(response.CachedPath);
             Assert.IsNotNull(response.Image);
         }
 

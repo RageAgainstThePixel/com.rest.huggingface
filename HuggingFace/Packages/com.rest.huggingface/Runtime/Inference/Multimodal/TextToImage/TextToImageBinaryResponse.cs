@@ -9,7 +9,7 @@ using Utilities.WebRequestRest;
 
 namespace HuggingFace.Inference.Multimodal.TextToImage
 {
-    public sealed class TextToImageResponse : BinaryInferenceTaskResponse
+    public sealed class TextToImageBinaryResponse : BinaryInferenceTaskResponse
     {
         public string CachedPath { get; private set; }
 
@@ -18,10 +18,9 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
         public override async Task DecodeAsync(Stream stream, CancellationToken cancellationToken = default)
         {
             await Rest.ValidateCacheDirectoryAsync();
-            var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
-            Debug.Log(filePath);
-            CachedPath = filePath;
-            var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+            var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
+            CachedPath = localFilePath;
+            var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
 
             try
             {
@@ -46,7 +45,7 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
                 await fileStream.DisposeAsync();
             }
 
-            Image = await Rest.DownloadTextureAsync($"file://{filePath}", parameters: null, cancellationToken: cancellationToken);
+            Image = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: null, cancellationToken: cancellationToken);
         }
     }
 }
