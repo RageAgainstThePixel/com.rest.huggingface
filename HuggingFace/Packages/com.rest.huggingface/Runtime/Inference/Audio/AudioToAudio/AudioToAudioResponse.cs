@@ -1,12 +1,12 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using UnityEngine;
 using Utilities.WebRequestRest;
 
@@ -31,13 +31,34 @@ namespace HuggingFace.Inference.Audio.AudioToAudio
         {
             await Rest.ValidateCacheDirectoryAsync();
 
-            if (!Rest.TryGetDownloadCacheItem(result.Blob, out var localFilePath))
+            Rest.TryGetDownloadCacheItem(result.Blob, out var guid);
+            var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}-{guid}.jpg");
+            var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
+
+            try
             {
-                await using var fileStream = new FileStream(localFilePath, FileMode.Create, FileAccess.ReadWrite);
                 await fileStream.WriteAsync(Convert.FromBase64String(result.Blob), cancellationToken);
+                await fileStream.FlushAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                switch (e)
+                {
+                    case TaskCanceledException:
+                    case OperationCanceledException:
+                        throw;
+                    default:
+                        Debug.LogError(e);
+                        throw;
+                }
+            }
+            finally
+            {
+                fileStream.Close();
+                await fileStream.DisposeAsync();
             }
 
-            result.AudioClip = await Rest.DownloadAudioClipAsync(localFilePath, AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
+            result.AudioClip = await Rest.DownloadAudioClipAsync($"file://{localFilePath}", AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
         }
     }
 }

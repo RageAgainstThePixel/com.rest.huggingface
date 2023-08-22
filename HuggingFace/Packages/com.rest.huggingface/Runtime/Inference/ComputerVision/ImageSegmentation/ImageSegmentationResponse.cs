@@ -1,12 +1,13 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using UnityEngine;
 using Utilities.WebRequestRest;
 
 namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
@@ -26,14 +27,34 @@ namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
         private static async Task DecodeImageAsync(ImageSegmentationResult result, CancellationToken cancellationToken)
         {
             await Rest.ValidateCacheDirectoryAsync();
+            Rest.TryGetDownloadCacheItem(result.Blob, out var guid);
+            var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}-{guid}.jpg");
+            var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
 
-            if (!Rest.TryGetDownloadCacheItem(result.Blob, out var localFilePath))
+            try
             {
-                await using var fileStream = new FileStream(localFilePath, FileMode.Create, FileAccess.ReadWrite);
                 await fileStream.WriteAsync(Convert.FromBase64String(result.Blob), cancellationToken);
+                await fileStream.FlushAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                switch (e)
+                {
+                    case TaskCanceledException:
+                    case OperationCanceledException:
+                        throw;
+                    default:
+                        Debug.LogError(e);
+                        throw;
+                }
+            }
+            finally
+            {
+                fileStream.Close();
+                await fileStream.DisposeAsync();
             }
 
-            result.Mask = await Rest.DownloadTextureAsync(localFilePath, parameters: null, cancellationToken: cancellationToken);
+            result.Mask = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: null, cancellationToken: cancellationToken);
         }
     }
 }

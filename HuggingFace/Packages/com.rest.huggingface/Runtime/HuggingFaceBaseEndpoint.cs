@@ -6,9 +6,13 @@ namespace HuggingFace
 {
     public abstract class HuggingFaceBaseEndpoint : BaseEndPoint<HuggingFaceClient, HuggingFaceAuthentication, HuggingFaceSettings>
     {
+        private const string HttpPrefix = "https://";
+
         protected HuggingFaceBaseEndpoint(HuggingFaceClient client) : base(client) { }
 
         protected string GetInferenceUrl(string endpoint)
-            => string.Format(client.Settings.InferenceRequestUrlFormat, $"{Root}/{endpoint}");
+            => endpoint.Contains(HttpPrefix)
+                ? endpoint
+                : string.Format(client.Settings.InferenceRequestUrlFormat, $"{Root}/{endpoint}");
     }
 }
