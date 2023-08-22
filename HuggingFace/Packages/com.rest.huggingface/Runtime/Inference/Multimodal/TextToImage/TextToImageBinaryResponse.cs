@@ -20,7 +20,7 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
             await Rest.ValidateCacheDirectoryAsync();
             var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
             CachedPath = localFilePath;
-            var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
+            var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
 
             try
             {
@@ -36,7 +36,7 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
                         throw;
                     default:
                         Debug.LogError(e);
-                        break;
+                        throw;
                 }
             }
             finally

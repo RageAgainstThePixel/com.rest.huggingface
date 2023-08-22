@@ -14,10 +14,10 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
     {
         public TextToImageB64Response(string content, JsonSerializerSettings settings) : base(content, settings)
         {
-            blob = JsonConvert.DeserializeObject<B64ImageResult>(content, settings).Blob;
+            Result = JsonConvert.DeserializeObject<B64ImageResult>(content, settings);
         }
 
-        private readonly string blob;
+        public B64ImageResult Result { get; private set; }
 
         public string CachedPath { get; private set; }
 
@@ -28,9 +28,30 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
             await Rest.ValidateCacheDirectoryAsync();
             var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
             CachedPath = localFilePath;
+            var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
 
-            await using var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
-            await fileStream.WriteAsync(Convert.FromBase64String(blob), cancellationToken);
+            try
+            {
+                await fileStream.WriteAsync(Convert.FromBase64String(Result.Blob), cancellationToken);
+                await fileStream.FlushAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                switch (e)
+                {
+                    case TaskCanceledException:
+                    case OperationCanceledException:
+                        throw;
+                    default:
+                        Debug.LogError(e);
+                        throw;
+                }
+            }
+            finally
+            {
+                fileStream.Close();
+                await fileStream.DisposeAsync();
+            }
 
             Image = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: null, cancellationToken: cancellationToken);
         }

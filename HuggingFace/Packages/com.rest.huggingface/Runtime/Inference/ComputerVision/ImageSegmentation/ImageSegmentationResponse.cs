@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 using Utilities.WebRequestRest;
 
 namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
@@ -28,8 +29,31 @@ namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
             await Rest.ValidateCacheDirectoryAsync();
             Rest.TryGetDownloadCacheItem(result.Blob, out var guid);
             var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}-{guid}.jpg");
-            await using var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.Read, FileShare.None);
-            await fileStream.WriteAsync(Convert.FromBase64String(result.Blob), cancellationToken);
+            var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
+
+            try
+            {
+                await fileStream.WriteAsync(Convert.FromBase64String(result.Blob), cancellationToken);
+                await fileStream.FlushAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                switch (e)
+                {
+                    case TaskCanceledException:
+                    case OperationCanceledException:
+                        throw;
+                    default:
+                        Debug.LogError(e);
+                        throw;
+                }
+            }
+            finally
+            {
+                fileStream.Close();
+                await fileStream.DisposeAsync();
+            }
+
             result.Mask = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: null, cancellationToken: cancellationToken);
         }
     }
