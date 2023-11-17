@@ -156,7 +156,7 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var param = new TextGenerationParameters(topP: 1);
+            var param = new TextGenerationParameters(topP: 0.9f);
             var task = new TextGenerationTask("The answer to the universe is", param);
             var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextGenerationTask, TextGenerationResponse>(task);
             Assert.IsNotNull(response);
