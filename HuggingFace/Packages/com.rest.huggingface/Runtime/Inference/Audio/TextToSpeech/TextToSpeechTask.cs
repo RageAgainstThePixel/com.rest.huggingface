@@ -21,5 +21,7 @@ namespace HuggingFace.Inference.Audio.TextToSpeech
         public string Input { get; }
 
         public override string Id => "text-to-speech";
+
+        public override string MimeType => "audio/mp3";
     }
 }

@@ -58,7 +58,7 @@ namespace HuggingFace.Tests
         {
             var api = new HuggingFaceClient();
             Assert.IsNotNull(api.InferenceEndpoint);
-            var task = new TextToSpeechTask("This is a test run");
+            var task = new TextToSpeechTask("This is a test run", "speechbrain/tts-tacotron2-ljspeech");
             var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.AudioClip);
