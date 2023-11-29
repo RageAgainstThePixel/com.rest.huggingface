@@ -75,7 +75,7 @@ namespace HuggingFace
                 configuration = Resources.LoadAll<HuggingFaceConfiguration>(string.Empty).FirstOrDefault(o => o != null);
             }
 
-            return new HuggingFaceAuthentication(configuration);
+            return configuration != null ? new HuggingFaceAuthentication(configuration) : null;
         }
 
         /// <inheritdoc />
