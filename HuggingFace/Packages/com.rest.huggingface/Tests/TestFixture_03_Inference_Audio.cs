@@ -17,18 +17,17 @@ namespace HuggingFace.Tests
     /// A list of tasks and their detailed parameters can be found:
     /// https://huggingface.co/docs/api-inference/detailed_parameters#audio
     /// </summary>
-    internal class TestFixture_03_Inference_Audio
+    internal class TestFixture_03_Inference_Audio : AbstractTestFixture
     {
         [Test]
         public async Task Test_01_AutomaticSpeechRecognitionTask()
         {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.InferenceEndpoint);
+            Assert.IsNotNull(HuggingFaceClient.InferenceEndpoint);
             var audioPath = AssetDatabase.GUIDToAssetPath("900a512d644c38c47846d9a6e41961f6");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
             var task = new AutomaticSpeechRecognitionTask(input);
-            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<AutomaticSpeechRecognitionTask, AutomaticSpeechRecognitionResponse>(task);
+            var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<AutomaticSpeechRecognitionTask, AutomaticSpeechRecognitionResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsFalse(string.IsNullOrWhiteSpace(response.Result));
             Debug.Log(response.Result);
@@ -37,13 +36,12 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_02_AudioClassificationTask()
         {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.InferenceEndpoint);
+            Assert.IsNotNull(HuggingFaceClient.InferenceEndpoint);
             var audioPath = AssetDatabase.GUIDToAssetPath("6b684332a20988c45933a5a73b22c429");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
             var task = new AudioClassificationTask(input);
-            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioClassificationTask, AudioClassificationResponse>(task);
+            var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<AudioClassificationTask, AudioClassificationResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsNotEmpty(response.Results);
 
@@ -56,10 +54,9 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_03_TextToSpeechTask()
         {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.InferenceEndpoint);
+            Assert.IsNotNull(HuggingFaceClient.InferenceEndpoint);
             var task = new TextToSpeechTask("This is a test run", "speechbrain/tts-tacotron2-ljspeech");
-            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
+            var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<TextToSpeechTask, TextToSpeechResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.AudioClip);
             Debug.Log(response.CachedPath);
@@ -68,13 +65,12 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_04_AudioToAudioTask()
         {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.InferenceEndpoint);
+            Assert.IsNotNull(HuggingFaceClient.InferenceEndpoint);
             var audioPath = AssetDatabase.GUIDToAssetPath("07d1a9fd7238ed941af19229414ce747");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
             var task = new AudioToAudioTask(input);
-            var response = await api.InferenceEndpoint.RunInferenceTaskAsync<AudioToAudioTask, AudioToAudioResponse>(task);
+            var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<AudioToAudioTask, AudioToAudioResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsNotEmpty(response.Results);
 

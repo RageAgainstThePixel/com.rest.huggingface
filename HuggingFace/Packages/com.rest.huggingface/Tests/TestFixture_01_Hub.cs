@@ -10,14 +10,13 @@ using UnityEngine;
 
 namespace HuggingFace.Tests
 {
-    internal class TestFixture_01_Hub
+    internal class TestFixture_01_Hub : AbstractTestFixture
     {
         [Test]
         public async Task Test_01_WhoAmI()
         {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.HubEndpoint);
-            var result = await api.HubEndpoint.WhoAmIAsync();
+            Assert.IsNotNull(HuggingFaceClient.HubEndpoint);
+            var result = await HuggingFaceClient.HubEndpoint.WhoAmIAsync();
             Assert.IsNotNull(result);
             Debug.Log(result.Fullname);
         }
@@ -25,9 +24,8 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_02_Tasks()
         {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.HubEndpoint);
-            var taskList = await api.HubEndpoint.GetAllTasksAsync();
+            Assert.IsNotNull(HuggingFaceClient.HubEndpoint);
+            var taskList = await HuggingFaceClient.HubEndpoint.GetAllTasksAsync();
             var implementedTasks = new Dictionary<string, InferenceTask>();
 
             foreach (var type in
@@ -74,7 +72,7 @@ namespace HuggingFace.Tests
 
             foreach (var (taskId, taskInfo) in taskList)
             {
-                var recommendedModel = await api.HubEndpoint.GetRecommendedModelAsync(taskId);
+                var recommendedModel = await HuggingFaceClient.HubEndpoint.GetRecommendedModelAsync(taskId);
 
                 if (recommendedModel != null)
                 {
@@ -97,9 +95,8 @@ namespace HuggingFace.Tests
         [Test]
         public async Task Test_03_Models()
         {
-            var api = new HuggingFaceClient();
-            Assert.IsNotNull(api.HubEndpoint);
-            var modelTags = await api.HubEndpoint.GetModelTagsAsync();
+            Assert.IsNotNull(HuggingFaceClient.HubEndpoint);
+            var modelTags = await HuggingFaceClient.HubEndpoint.GetModelTagsAsync();
             Assert.IsNotNull(modelTags);
             Debug.Log($"{modelTags.PipelineTag.Count} pipeline tags");
 
@@ -107,14 +104,14 @@ namespace HuggingFace.Tests
             {
                 Debug.Log($"{pipelineTag.Id} | {pipelineTag.Label} | {pipelineTag.SubType}");
 
-                var recommendedModel = await api.HubEndpoint.GetRecommendedModelAsync(pipelineTag);
+                var recommendedModel = await HuggingFaceClient.HubEndpoint.GetRecommendedModelAsync(pipelineTag);
 
                 if (recommendedModel == null)
                 {
                     Debug.LogWarning($"{pipelineTag} does not have a recommended model");
                 }
 
-                var recommendedModels = await api.HubEndpoint.GetRecommendedModelsAsync(pipelineTag);
+                var recommendedModels = await HuggingFaceClient.HubEndpoint.GetRecommendedModelsAsync(pipelineTag);
 
                 foreach (var model in recommendedModels)
                 {

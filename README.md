@@ -51,8 +51,10 @@ The recommended installation method is though the unity package manager and [Ope
 
 There are 4 ways to provide your API keys, in order of precedence:
 
-1. [Pass keys directly with constructor](#pass-keys-directly-with-constructor)
-2. [Unity Scriptable Object](#unity-scriptable-object)
+:warning: We recommended using the environment variables to load the API key instead of having it hard coded in your source. It is not recommended use this method in production, but only for accepting user credentials, local testing and quick start scenarios.
+
+1. [Pass keys directly with constructor](#pass-keys-directly-with-constructor) :warning:
+2. [Unity Scriptable Object](#unity-scriptable-object) :warning:
 3. [Load key from configuration file](#load-key-from-configuration-file)
 4. [Use System Environment Variables](#use-system-environment-variables)
 
@@ -93,7 +95,7 @@ To create a configuration file, create a new text file named `.huggingface` and 
 You can also load the file directly with known path by calling a static method in Authentication:
 
 ```csharp
-var api = new HuggingFaceClient(HuggingFaceAuthentication.Default.LoadFromDirectory("your/path/to/.huggingface"));;
+var api = new HuggingFaceClient(new HuggingFaceAuthentication().LoadFromDirectory("your/path/to/.huggingface"));;
 ```
 
 #### Use System Environment Variables
@@ -103,7 +105,7 @@ Use your system's environment variables specify an api key to use.
 - Use `HUGGING_FACE_API_KEY` for your api key.
 
 ```csharp
-var api = new HuggingFaceClient(HuggingFaceAuthentication.Default.LoadFromEnvironment());
+var api = new HuggingFaceClient(new HuggingFaceAuthentication().LoadFromEnvironment());
 ```
 
 ### Hub
