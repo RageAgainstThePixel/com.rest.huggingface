@@ -22,14 +22,14 @@ namespace HuggingFace
                 configuration = Resources.LoadAll<HuggingFaceConfiguration>(string.Empty).FirstOrDefault(asset => asset != null);
             }
 
-            if (configuration == null)
-            {
-                throw new MissingReferenceException($"Failed to find a valid {nameof(HuggingFaceConfiguration)}!");
-            }
-
             if (configuration != null)
             {
                 Info = new HuggingFaceSettingsInfo(configuration.ProxyDomain);
+                cachedDefault = new HuggingFaceSettings(Info);
+            }
+            else
+            {
+                Info = new HuggingFaceSettingsInfo();
                 cachedDefault = new HuggingFaceSettings(Info);
             }
         }
