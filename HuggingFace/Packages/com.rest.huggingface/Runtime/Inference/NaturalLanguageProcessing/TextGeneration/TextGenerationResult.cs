@@ -9,4 +9,9 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
         [JsonProperty("generated_text")]
         public string Text { get; set; }
     }
+
+    public sealed class TextResultDetails
+    {
+
+    }
 }

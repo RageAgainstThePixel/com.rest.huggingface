@@ -6,6 +6,9 @@ using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
 {
+    /// <summary>
+    /// https://huggingface.github.io/text-generation-inference/
+    /// </summary>
     public sealed class TextGenerationTask : BaseJsonPayloadInferenceTask
     {
         [Preserve]
