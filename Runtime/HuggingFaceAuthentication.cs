@@ -8,7 +8,7 @@ using Utilities.WebRequestRest.Interfaces;
 
 namespace HuggingFace
 {
-    public sealed class HuggingFaceAuthentication : AbstractAuthentication<HuggingFaceAuthentication, HuggingFaceAuthInfo>
+    public sealed class HuggingFaceAuthentication : AbstractAuthentication<HuggingFaceAuthentication, HuggingFaceAuthInfo, HuggingFaceConfiguration>
     {
         internal const string CONFIG_FILE = ".huggingface";
         private const string HUGGING_FACE_API_KEY = nameof(HUGGING_FACE_API_KEY);
@@ -20,30 +20,35 @@ namespace HuggingFace
         public static implicit operator HuggingFaceAuthentication(string apiKey) => new HuggingFaceAuthentication(apiKey);
 
         /// <summary>
-        /// Instantiates a new Authentication object that will load the default config.
+        /// Instantiates an empty Authentication object.
         /// </summary>
-        public HuggingFaceAuthentication()
-        {
-            if (cachedDefault != null) { return; }
-
-            cachedDefault = (LoadFromAsset<HuggingFaceConfiguration>() ??
-                             LoadFromDirectory()) ??
-                             LoadFromDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)) ??
-                             LoadFromEnvironment();
-            Info = cachedDefault?.Info;
-        }
+        public HuggingFaceAuthentication() { }
 
         /// <summary>
         /// Instantiates a new Authentication object with the given <paramref name="apiKey"/>, which may be <see langword="null"/>.
         /// </summary>
         /// <param name="apiKey">The API key, required to access the API endpoint.</param>
-        public HuggingFaceAuthentication(string apiKey) => Info = new HuggingFaceAuthInfo(apiKey);
+        public HuggingFaceAuthentication(string apiKey)
+        {
+            Info = new HuggingFaceAuthInfo(apiKey);
+            cachedDefault = this;
+        }
 
         /// <summary>
         /// Instantiates a new Authentication object with the given <paramref name="authInfo"/>, which may be <see langword="null"/>.
         /// </summary>
-        /// <param name="authInfo"></param>
-        public HuggingFaceAuthentication(HuggingFaceAuthInfo authInfo) => Info = authInfo;
+        /// <param name="authInfo"><see cref="HuggingFaceAuthInfo"/>.</param>
+        public HuggingFaceAuthentication(HuggingFaceAuthInfo authInfo)
+        {
+            Info = authInfo;
+            cachedDefault = this;
+        }
+
+        /// <summary>
+        /// Instantiates a new Authentication object with the given <see cref="configuration"/>.
+        /// </summary>
+        /// <param name="configuration"><see cref="HuggingFaceConfiguration"/>.</param>
+        public HuggingFaceAuthentication(HuggingFaceConfiguration configuration) : this(configuration.ApiKey) { }
 
         /// <inheritdoc />
         public override HuggingFaceAuthInfo Info { get; }
@@ -57,18 +62,21 @@ namespace HuggingFace
         /// </summary>
         public static HuggingFaceAuthentication Default
         {
-            get => cachedDefault ?? new HuggingFaceAuthentication();
+            get => cachedDefault ??= new HuggingFaceAuthentication().LoadDefault();
             internal set => cachedDefault = value;
         }
 
         /// <inheritdoc />
-        public override HuggingFaceAuthentication LoadFromAsset<T>()
-            => Resources.LoadAll<T>(string.Empty)
-                .Where(asset => asset != null)
-                .Select(asset => asset is HuggingFaceConfiguration config && !string.IsNullOrWhiteSpace(config.ApiKey)
-                    ? new HuggingFaceAuthentication(config.ApiKey)
-                    : null)
-                .FirstOrDefault();
+        public override HuggingFaceAuthentication LoadFromAsset(HuggingFaceConfiguration configuration = null)
+        {
+            if (configuration == null)
+            {
+                Debug.LogWarning($"This can be speed this up by passing a {nameof(HuggingFaceConfiguration)} to the {nameof(HuggingFaceAuthentication)}.ctr");
+                configuration = Resources.LoadAll<HuggingFaceConfiguration>(string.Empty).FirstOrDefault(o => o != null);
+            }
+
+            return configuration != null ? new HuggingFaceAuthentication(configuration) : null;
+        }
 
         /// <inheritdoc />
         public override HuggingFaceAuthentication LoadFromEnvironment()

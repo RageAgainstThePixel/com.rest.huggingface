@@ -30,9 +30,8 @@ namespace HuggingFace.Inference.Audio.AudioToAudio
         private static async Task DecodeAudioAsync(AudioToAudioResult result, CancellationToken cancellationToken)
         {
             await Rest.ValidateCacheDirectoryAsync();
-
             Rest.TryGetDownloadCacheItem(result.Blob, out var guid);
-            var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}-{guid}.jpg");
+            var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}-{Path.GetFileName(guid)}.mp3");
             var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
 
             try
@@ -58,7 +57,7 @@ namespace HuggingFace.Inference.Audio.AudioToAudio
                 await fileStream.DisposeAsync();
             }
 
-            result.AudioClip = await Rest.DownloadAudioClipAsync($"file://{localFilePath}", AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
+            result.AudioClip = await Rest.DownloadAudioClipAsync($"file://{localFilePath}", AudioType.MPEG, parameters: null, cancellationToken: cancellationToken);
         }
     }
 }

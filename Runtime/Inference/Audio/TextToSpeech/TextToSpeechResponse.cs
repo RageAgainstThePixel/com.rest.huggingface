@@ -18,7 +18,7 @@ namespace HuggingFace.Inference.Audio.TextToSpeech
         public override async Task DecodeAsync(Stream stream, CancellationToken cancellationToken = default)
         {
             await Rest.ValidateCacheDirectoryAsync();
-            var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.wav");
+            var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.mp3");
             Debug.Log(filePath);
             CachedPath = filePath;
             var fileStream = new FileStream(filePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
@@ -46,7 +46,7 @@ namespace HuggingFace.Inference.Audio.TextToSpeech
                 await fileStream.DisposeAsync();
             }
 
-            AudioClip = await Rest.DownloadAudioClipAsync($"file://{filePath}", AudioType.WAV, parameters: null, cancellationToken: cancellationToken);
+            AudioClip = await Rest.DownloadAudioClipAsync($"file://{filePath}", AudioType.MPEG, parameters: null, cancellationToken: cancellationToken);
         }
     }
 }

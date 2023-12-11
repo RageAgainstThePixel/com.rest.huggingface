@@ -10,14 +10,21 @@ namespace HuggingFace
     {
         public HuggingFaceSettings()
         {
-            if (cachedDefault != null) { return; }
+            Info = new HuggingFaceSettingsInfo();
+            cachedDefault = new HuggingFaceSettings(Info);
+        }
 
-            var config = Resources.LoadAll<HuggingFaceConfiguration>(string.Empty)
-                .FirstOrDefault(asset => asset != null);
-
-            if (config != null)
+        public HuggingFaceSettings(HuggingFaceConfiguration configuration)
+        {
+            if (configuration == null)
             {
-                Info = new HuggingFaceSettingsInfo(config.ProxyDomain);
+                Debug.LogWarning($"You can speed this up by passing a {nameof(HuggingFaceConfiguration)} to the {nameof(HuggingFaceSettings)}.ctr");
+                configuration = Resources.LoadAll<HuggingFaceConfiguration>(string.Empty).FirstOrDefault(asset => asset != null);
+            }
+
+            if (configuration != null)
+            {
+                Info = new HuggingFaceSettingsInfo(configuration.ProxyDomain);
                 cachedDefault = new HuggingFaceSettings(Info);
             }
             else
@@ -28,16 +35,22 @@ namespace HuggingFace
         }
 
         public HuggingFaceSettings(HuggingFaceSettingsInfo settingsInfo)
-            => Info = settingsInfo;
+        {
+            Info = settingsInfo;
+            cachedDefault = this;
+        }
 
         public HuggingFaceSettings(string domain)
-            => Info = new HuggingFaceSettingsInfo(domain);
+        {
+            Info = new HuggingFaceSettingsInfo(domain);
+            cachedDefault = this;
+        }
 
         private static HuggingFaceSettings cachedDefault;
 
         public static HuggingFaceSettings Default
         {
-            get => cachedDefault ?? new HuggingFaceSettings();
+            get => cachedDefault ?? new HuggingFaceSettings(configuration: null);
             internal set => cachedDefault = value;
         }
 

@@ -28,7 +28,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
         {
             await Rest.ValidateCacheDirectoryAsync();
             Rest.TryGetDownloadCacheItem(result.Blob, out var guid);
-            var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}-{guid}.jpg");
+            var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}-{Path.GetFileName(guid)}.jpg");
             var fileStream = new FileStream(localFilePath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
 
             try

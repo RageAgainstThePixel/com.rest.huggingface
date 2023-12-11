@@ -12,20 +12,27 @@ namespace HuggingFace.Inference
     {
         protected InferenceTask() { }
 
-        protected InferenceTask(ModelInfo model, InferenceOptions options)
+        protected InferenceTask(ModelInfo model, InferenceOptions options, Action<string> streamCallback = null)
         {
             Model = model;
             Options = options ?? new InferenceOptions();
+            Stream = streamCallback != null;
         }
 
         [JsonIgnore]
         public abstract string Id { get; }
 
         [JsonIgnore]
+        public virtual string MimeType { get; } = string.Empty;
+
+        [JsonIgnore]
         public ModelInfo Model { get; internal set; }
 
         [JsonProperty("options")]
         public InferenceOptions Options { get; }
+
+        [JsonProperty("stream")]
+        public bool Stream { get; }
 
         public virtual Task<string> ToJsonAsync(JsonSerializerSettings settings, CancellationToken cancellationToken)
             => Task.FromResult(string.Empty);
