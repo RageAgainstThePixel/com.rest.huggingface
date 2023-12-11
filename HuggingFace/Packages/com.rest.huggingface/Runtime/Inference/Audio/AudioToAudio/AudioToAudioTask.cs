@@ -16,5 +16,7 @@ namespace HuggingFace.Inference.Audio.AudioToAudio
         }
 
         public override string Id => "audio-to-audio";
+
+        public override string MimeType => "audio/mp3";
     }
 }

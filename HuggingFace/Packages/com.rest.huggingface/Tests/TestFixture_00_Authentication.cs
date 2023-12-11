@@ -22,7 +22,7 @@ namespace HuggingFace.Tests
         [Test]
         public void Test_01_GetAuthFromEnv()
         {
-            var auth = HuggingFaceAuthentication.Default.LoadFromEnvironment();
+            var auth = new HuggingFaceAuthentication().LoadFromEnvironment();
             Assert.IsNotNull(auth);
             Assert.IsNotNull(auth.Info.ApiKey);
             Assert.IsNotEmpty(auth.Info.ApiKey);
@@ -31,7 +31,7 @@ namespace HuggingFace.Tests
         [Test]
         public void Test_02_GetAuthFromFile()
         {
-            var auth = HuggingFaceAuthentication.Default.LoadFromPath(Path.GetFullPath(HuggingFaceAuthentication.CONFIG_FILE));
+            var auth = new HuggingFaceAuthentication().LoadFromPath(Path.GetFullPath(HuggingFaceAuthentication.CONFIG_FILE));
             Assert.IsNotNull(auth);
             Assert.IsNotNull(auth.Info.ApiKey);
             Assert.AreEqual("key-test12", auth.Info.ApiKey);
@@ -40,7 +40,7 @@ namespace HuggingFace.Tests
         [Test]
         public void Test_03_GetAuthFromNonExistentFile()
         {
-            var auth = HuggingFaceAuthentication.Default.LoadFromDirectory(filename: "bad.config");
+            var auth = new HuggingFaceAuthentication().LoadFromDirectory(filename: "bad.config");
             Assert.IsNull(auth);
         }
 
@@ -63,13 +63,14 @@ namespace HuggingFace.Tests
                 cleanup = true;
             }
 
-            var config = AssetDatabase.LoadAssetAtPath<HuggingFaceConfiguration>(configPath);
-            var auth = HuggingFaceAuthentication.Default.LoadFromAsset<HuggingFaceConfiguration>();
+            var configuration = AssetDatabase.LoadAssetAtPath<HuggingFaceConfiguration>(configPath);
+            Assert.IsNotNull(configuration);
+            var auth = new HuggingFaceAuthentication().LoadFromAsset(configuration);
 
             Assert.IsNotNull(auth);
             Assert.IsNotNull(auth.Info.ApiKey);
             Assert.IsNotEmpty(auth.Info.ApiKey);
-            Assert.AreEqual(auth.Info.ApiKey, config.ApiKey);
+            Assert.AreEqual(auth.Info.ApiKey, configuration.ApiKey);
 
             if (cleanup)
             {
@@ -82,14 +83,15 @@ namespace HuggingFace.Tests
         public void Test_05_Authentication()
         {
             var defaultAuth = HuggingFaceAuthentication.Default;
-            var manualAuth = new HuggingFaceAuthentication("key-testAA");
 
+            Assert.IsNotNull(defaultAuth);
             Assert.IsNotNull(defaultAuth);
             Assert.IsNotNull(defaultAuth.Info.ApiKey);
             Assert.AreEqual(defaultAuth.Info.ApiKey, HuggingFaceAuthentication.Default.Info.ApiKey);
 
-            HuggingFaceAuthentication.Default = new HuggingFaceAuthentication("key-testAA");
+            var manualAuth = new HuggingFaceAuthentication("key-testAA");
             Assert.IsNotNull(manualAuth);
+            Assert.IsNotNull(manualAuth.Info);
             Assert.IsNotNull(manualAuth.Info.ApiKey);
             Assert.AreEqual(manualAuth.Info.ApiKey, HuggingFaceAuthentication.Default.Info.ApiKey);
 
@@ -155,6 +157,9 @@ namespace HuggingFace.Tests
             {
                 File.Delete(HuggingFaceAuthentication.CONFIG_FILE);
             }
+
+            HuggingFaceSettings.Default = null;
+            HuggingFaceAuthentication.Default = null;
         }
     }
 }

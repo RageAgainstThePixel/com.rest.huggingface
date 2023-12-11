@@ -3,18 +3,16 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Utilities.Async;
 using Utilities.WebRequestRest;
 
 namespace HuggingFace.Inference
 {
     public sealed class InferenceEndpoint : HuggingFaceBaseEndpoint
     {
-        public bool EnableLogging { get; set; } = true;
-
         public int MaxRetryAttempts { get; set; } = 3;
 
         public int Timeout { get; set; } = -1;
@@ -40,6 +38,12 @@ namespace HuggingFace.Inference
             }
 
             var endpoint = GetInferenceUrl(task.Model.ModelId);
+
+            if (EnableDebug)
+            {
+                Debug.Log(endpoint);
+            }
+
             Response response;
             var attempt = 0;
 
@@ -47,35 +51,37 @@ namespace HuggingFace.Inference
             {
                 try
                 {
+                    var headers = client.DefaultRequestHeaders.ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                    if (!string.IsNullOrWhiteSpace(task.MimeType))
+                    {
+                        headers.Add("Accept", task.MimeType);
+                    }
+
                     var jsonData = await task.ToJsonAsync(client.JsonSerializationOptions, cancellationToken).ConfigureAwait(true);
 
                     if (!string.IsNullOrWhiteSpace(jsonData))
                     {
-                        if (EnableLogging)
+                        if (EnableDebug)
                         {
                             Debug.Log(jsonData);
                         }
 
-                        response = await Rest.PostAsync(endpoint, jsonData, parameters: new RestParameters(client.DefaultRequestHeaders, timeout: Timeout), cancellationToken);
+                        response = await Rest.PostAsync(endpoint, jsonData, parameters: new RestParameters(headers, timeout: Timeout), cancellationToken);
                     }
                     else
                     {
                         var byteData = await task.ToByteArrayAsync(cancellationToken);
-                        // TODO ensure proper accept headers are set here
-                        response = await Rest.PostAsync(endpoint, byteData, parameters: new RestParameters(client.DefaultRequestHeaders, timeout: Timeout), cancellationToken);
+                        response = await Rest.PostAsync(endpoint, byteData, parameters: new RestParameters(headers, timeout: Timeout), cancellationToken);
                     }
 
-                    response.Validate(EnableLogging);
+                    response.Validate(EnableDebug);
                 }
                 catch (RestException restEx)
                 {
-                    if (restEx.Response.Code == 503 &&
-                        task.Options.WaitForModel)
+                    if (restEx.Response.Code == 503 && task.Options.WaitForModel)
                     {
-                        if (++attempt == MaxRetryAttempts)
-                        {
-                            throw;
-                        }
+                        if (++attempt == MaxRetryAttempts) { throw; }
 
                         HuggingFaceError error;
 
@@ -89,7 +95,7 @@ namespace HuggingFace.Inference
                             throw restEx;
                         }
 
-                        if (EnableLogging)
+                        if (EnableDebug)
                         {
                             Debug.LogWarning($"Waiting for model for {error.EstimatedTime} seconds... attempt {attempt} of {MaxRetryAttempts}\n{restEx}");
                         }
@@ -126,6 +132,11 @@ namespace HuggingFace.Inference
 
                 if (binaryResponse is BinaryInferenceTaskResponse taskResponse)
                 {
+                    if (response.Headers.TryGetValue("Content-Type", out var contentType))
+                    {
+                        Debug.Log($"{typeof(TResponse).Name} Content-Type: {contentType}");
+                    }
+
                     await using var contentStream = new MemoryStream(response.Data);
 
                     try
