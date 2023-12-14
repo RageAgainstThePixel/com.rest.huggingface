@@ -13,6 +13,6 @@ namespace HuggingFace.Inference
         {
         }
 
-        public abstract Task DecodeAsync(CancellationToken cancellationToken = default);
+        public abstract Task DecodeAsync(bool debug = false, CancellationToken cancellationToken = default);
     }
 }

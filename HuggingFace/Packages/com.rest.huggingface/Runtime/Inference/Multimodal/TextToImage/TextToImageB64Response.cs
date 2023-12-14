@@ -23,7 +23,7 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
 
         public Texture2D Image { get; private set; }
 
-        public override async Task DecodeAsync(CancellationToken cancellationToken = default)
+        public override async Task DecodeAsync(bool debug = false, CancellationToken cancellationToken = default)
         {
             await Rest.ValidateCacheDirectoryAsync();
             var localFilePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
@@ -53,7 +53,7 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
                 await fileStream.DisposeAsync();
             }
 
-            Image = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: null, cancellationToken: cancellationToken);
+            Image = await Rest.DownloadTextureAsync($"file://{localFilePath}", debug: debug, cancellationToken: cancellationToken);
         }
     }
 }
