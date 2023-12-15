@@ -3,7 +3,7 @@
   "displayName": "HuggingFace",
   "description": "A Non-Official HuggingFace Rest Client for Unity (UPM)",
   "keywords": [],
-  "version": "1.0.0-preview.12",
+  "version": "1.0.0-preview.13",
   "unity": "2021.3",
   "documentationUrl": "https://github.com/RageAgainstThePixel/com.rest.huggingface#documentation",
   "changelogUrl": "https://github.com/RageAgainstThePixel/com.rest.huggingface/releases",
@@ -20,7 +20,7 @@
     "registry": "https://package.openupm.com"
   },
   "dependencies": {
-    "com.utilities.rest": "2.3.1",
+    "com.utilities.rest": "2.4.0",
     "com.utilities.encoder.wav": "1.0.8",
     "com.utilities.encoder.ogg": "3.0.12"
   },

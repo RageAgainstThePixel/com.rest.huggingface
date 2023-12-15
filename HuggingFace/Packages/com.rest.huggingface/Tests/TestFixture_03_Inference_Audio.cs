@@ -26,7 +26,7 @@ namespace HuggingFace.Tests
             var audioPath = AssetDatabase.GUIDToAssetPath("900a512d644c38c47846d9a6e41961f6");
             var audioClip = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPath);
             using var input = new SingleSourceAudioInput(audioClip);
-            var task = new AutomaticSpeechRecognitionTask(input);
+            var task = new AutomaticSpeechRecognitionTask(input, "distil-whisper/distil-large-v2");
             var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<AutomaticSpeechRecognitionTask, AutomaticSpeechRecognitionResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsFalse(string.IsNullOrWhiteSpace(response.Result));
