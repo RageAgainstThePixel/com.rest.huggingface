@@ -21,10 +21,10 @@ namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
 
         public IReadOnlyList<ImageSegmentationResult> Results { get; }
 
-        public override async Task DecodeAsync(CancellationToken cancellationToken = default)
-            => await Task.WhenAll(Results.Select(result => DecodeImageAsync(result, cancellationToken)).ToList());
+        public override async Task DecodeAsync(bool debug = false, CancellationToken cancellationToken = default)
+            => await Task.WhenAll(Results.Select(result => DecodeImageAsync(result, debug, cancellationToken)).ToList());
 
-        private static async Task DecodeImageAsync(ImageSegmentationResult result, CancellationToken cancellationToken)
+        private static async Task DecodeImageAsync(ImageSegmentationResult result, bool debug = false, CancellationToken cancellationToken = default)
         {
             await Rest.ValidateCacheDirectoryAsync();
             Rest.TryGetDownloadCacheItem(result.Blob, out var guid);
@@ -54,7 +54,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
                 await fileStream.DisposeAsync();
             }
 
-            result.Mask = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: null, cancellationToken: cancellationToken);
+            result.Mask = await Rest.DownloadTextureAsync($"file://{localFilePath}", debug: debug, cancellationToken: cancellationToken);
         }
     }
 }

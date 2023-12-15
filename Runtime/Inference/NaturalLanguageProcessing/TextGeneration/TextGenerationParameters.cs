@@ -5,8 +5,8 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
     public sealed class TextGenerationParameters
     {
         public TextGenerationParameters(
-            [JsonProperty("top_k")] int? topK = null,
-            [JsonProperty("top_p")] int? topP = null,
+            [JsonProperty("top_k")] float? topK = null,
+            [JsonProperty("top_p")] float? topP = null,
             [JsonProperty("temperature")] float? temperature = null,
             [JsonProperty("repetition_penalty")] float? repetitionPenalty = null,
             [JsonProperty("max_new_tokens")] int? maxTokens = null,
@@ -30,14 +30,14 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
         /// (Default: None). Integer to define the top tokens considered within the sample operation to create new text.
         /// </summary>
         [JsonProperty("top_k")]
-        public int? TopK { get; set; }
+        public float? TopK { get; set; }
 
         /// <summary>
         /// (Default: None). Float to define the tokens that are within the sample operation of text generation.
         /// Add tokens in the sample for more probable to least probable until the sum of the probabilities is greater than top_p.
         /// </summary>
         [JsonProperty("top_p")]
-        public int? TopP { get; set; }
+        public float? TopP { get; set; }
 
         /// <summary>
         /// (Default: 1.0). Float (0.0-100.0). The temperature of the sampling operation.

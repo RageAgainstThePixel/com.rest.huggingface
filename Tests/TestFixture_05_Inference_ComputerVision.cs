@@ -81,7 +81,7 @@ namespace HuggingFace.Tests
             var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(imagePath);
             using var input = new SingleSourceImageInput(texture);
             var param = new ImageToImageParameters("Girl with Pearl Earring");
-            var task = new ImageToImageTask(input, param);
+            var task = new ImageToImageTask(input, param, "stabilityai/stable-diffusion-xl-refiner-1.0");
             var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<ImageToImageTask, ImageToImageResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Image);

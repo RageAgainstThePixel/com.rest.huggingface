@@ -15,7 +15,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageToImage
 
         public Texture2D Image { get; private set; }
 
-        public override async Task DecodeAsync(Stream stream, CancellationToken cancellationToken = default)
+        public override async Task DecodeAsync(Stream stream, bool debug = false, CancellationToken cancellationToken = default)
         {
             await Rest.ValidateCacheDirectoryAsync();
             var filePath = Path.Combine(Rest.DownloadCacheDirectory, $"{DateTime.UtcNow:yyyy-MM-ddTHH-mm-ssffff}.jpg");
@@ -46,7 +46,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageToImage
                 await fileStream.DisposeAsync();
             }
 
-            Image = await Rest.DownloadTextureAsync($"file://{filePath}", parameters: null, cancellationToken: cancellationToken);
+            Image = await Rest.DownloadTextureAsync($"file://{filePath}", debug: debug, cancellationToken: cancellationToken);
         }
     }
 }

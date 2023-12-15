@@ -24,10 +24,10 @@ namespace HuggingFace.Inference.Audio.AudioToAudio
         public IReadOnlyList<AudioToAudioResult> Results { get; }
 
         /// <inheritdoc />
-        public override async Task DecodeAsync(CancellationToken cancellationToken = default)
-            => await Task.WhenAll(Results.Select(result => DecodeAudioAsync(result, cancellationToken)).ToList());
+        public override async Task DecodeAsync(bool debug = false, CancellationToken cancellationToken = default)
+            => await Task.WhenAll(Results.Select(result => DecodeAudioAsync(result, debug, cancellationToken)).ToList());
 
-        private static async Task DecodeAudioAsync(AudioToAudioResult result, CancellationToken cancellationToken)
+        private static async Task DecodeAudioAsync(AudioToAudioResult result, bool debug = false, CancellationToken cancellationToken = default)
         {
             await Rest.ValidateCacheDirectoryAsync();
             Rest.TryGetDownloadCacheItem(result.Blob, out var guid);
@@ -57,7 +57,7 @@ namespace HuggingFace.Inference.Audio.AudioToAudio
                 await fileStream.DisposeAsync();
             }
 
-            result.AudioClip = await Rest.DownloadAudioClipAsync($"file://{localFilePath}", AudioType.MPEG, parameters: null, cancellationToken: cancellationToken);
+            result.AudioClip = await Rest.DownloadAudioClipAsync($"file://{localFilePath}", AudioType.MPEG, debug: debug, cancellationToken: cancellationToken);
         }
     }
 }
