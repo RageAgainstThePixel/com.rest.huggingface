@@ -120,7 +120,7 @@ namespace HuggingFace.Inference
 
                 if (jsonResponse is B64JsonInferenceTaskResponse b64JsonInferenceTaskResponse)
                 {
-                    await b64JsonInferenceTaskResponse.DecodeAsync(cancellationToken);
+                    await b64JsonInferenceTaskResponse.DecodeAsync(EnableDebug, cancellationToken);
                 }
 
                 return jsonResponse;
@@ -141,7 +141,7 @@ namespace HuggingFace.Inference
 
                     try
                     {
-                        await taskResponse.DecodeAsync(contentStream, cancellationToken);
+                        await taskResponse.DecodeAsync(contentStream, EnableDebug, cancellationToken);
                     }
                     finally
                     {

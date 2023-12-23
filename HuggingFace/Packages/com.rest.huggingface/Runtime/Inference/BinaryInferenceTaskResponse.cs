@@ -8,6 +8,6 @@ namespace HuggingFace.Inference
 {
     public abstract class BinaryInferenceTaskResponse : InferenceTaskResponse
     {
-        public abstract Task DecodeAsync(Stream stream, CancellationToken cancellationToken = default);
+        public abstract Task DecodeAsync(Stream stream, bool debug = false, CancellationToken cancellationToken = default);
     }
 }
