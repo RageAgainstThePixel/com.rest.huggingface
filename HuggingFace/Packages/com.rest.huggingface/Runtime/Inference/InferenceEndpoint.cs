@@ -60,7 +60,7 @@ namespace HuggingFace.Inference
                         headers.Add("Accept", task.MimeType);
                     }
 
-                    var jsonData = await task.ToJsonAsync(client.JsonSerializationOptions, cancellationToken).ConfigureAwait(true);
+                    var jsonData = await task.ToJsonAsync(HuggingFaceClient.JsonSerializationOptions, cancellationToken).ConfigureAwait(true);
 
                     if (!string.IsNullOrWhiteSpace(jsonData))
                     {
@@ -118,7 +118,7 @@ namespace HuggingFace.Inference
 
             if (typeof(JsonInferenceTaskResponse).IsAssignableFrom(typeof(TResponse)))
             {
-                var jsonResponse = Activator.CreateInstance(typeof(TResponse), response.Body, client.JsonSerializationOptions) as TResponse;
+                var jsonResponse = Activator.CreateInstance(typeof(TResponse), response.Body, HuggingFaceClient.JsonSerializationOptions) as TResponse;
 
                 if (jsonResponse is B64JsonInferenceTaskResponse b64JsonInferenceTaskResponse)
                 {

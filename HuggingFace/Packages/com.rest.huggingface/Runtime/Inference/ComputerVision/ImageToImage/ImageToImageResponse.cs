@@ -46,7 +46,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageToImage
                 await fileStream.DisposeAsync();
             }
 
-            Image = await Rest.DownloadTextureAsync($"file://{filePath}", debug: debug, cancellationToken: cancellationToken);
+            Image = await Rest.DownloadTextureAsync($"file://{filePath}", parameters: new RestParameters(debug: debug), cancellationToken: cancellationToken);
         }
     }
 }

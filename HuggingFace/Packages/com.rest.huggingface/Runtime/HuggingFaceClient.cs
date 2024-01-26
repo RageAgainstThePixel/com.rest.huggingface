@@ -22,12 +22,6 @@ namespace HuggingFace
         public HuggingFaceClient(HuggingFaceAuthentication authentication = null, HuggingFaceSettings settings = null)
             : base(authentication ?? HuggingFaceAuthentication.Default, settings ?? HuggingFaceSettings.Default)
         {
-            JsonSerializationOptions = new JsonSerializerSettings
-            {
-                DefaultValueHandling = DefaultValueHandling.Ignore,
-                NullValueHandling = NullValueHandling.Ignore,
-            };
-
             HubEndpoint = new HubEndpoint(this);
             InferenceEndpoint = new InferenceEndpoint(this);
         }
@@ -45,14 +39,18 @@ namespace HuggingFace
             => DefaultRequestHeaders = new Dictionary<string, string>
             {
 #if !UNITY_WEBGL
-                {"User-Agent", "com.rest.huggingface" },
+                { "User-Agent", "com.rest.huggingface" },
 #endif
-                {"Authorization", Rest.GetBearerOAuthToken(Authentication.Info.ApiKey) }
+                { "Authorization", Rest.GetBearerOAuthToken(Authentication.Info.ApiKey) }
             };
 
         public override bool HasValidAuthentication => !string.IsNullOrWhiteSpace(Authentication?.Info?.ApiKey);
 
-        internal JsonSerializerSettings JsonSerializationOptions { get; }
+        internal static JsonSerializerSettings JsonSerializationOptions { get; } = new JsonSerializerSettings
+        {
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore,
+        };
 
         public HubEndpoint HubEndpoint { get; }
 
