@@ -46,7 +46,7 @@ namespace HuggingFace.Inference.Audio.TextToSpeech
                 await fileStream.DisposeAsync();
             }
 
-            AudioClip = await Rest.DownloadAudioClipAsync($"file://{filePath}", AudioType.MPEG, debug: debug, cancellationToken: cancellationToken);
+            AudioClip = await Rest.DownloadAudioClipAsync($"file://{filePath}", AudioType.MPEG, parameters: new RestParameters(debug: debug), cancellationToken: cancellationToken);
         }
     }
 }
