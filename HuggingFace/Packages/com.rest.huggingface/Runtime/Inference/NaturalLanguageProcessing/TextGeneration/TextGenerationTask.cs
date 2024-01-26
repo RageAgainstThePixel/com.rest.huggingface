@@ -2,6 +2,7 @@
 
 using HuggingFace.Hub;
 using Newtonsoft.Json;
+using System;
 using UnityEngine.Scripting;
 
 namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
@@ -14,8 +15,8 @@ namespace HuggingFace.Inference.NaturalLanguageProcessing.TextGeneration
         [Preserve]
         public TextGenerationTask() { }
 
-        public TextGenerationTask(string input, TextGenerationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null)
-            : base(model, options)
+        public TextGenerationTask(string input, TextGenerationParameters parameters = null, ModelInfo model = null, InferenceOptions options = null, Action<string> streamCallback = null)
+            : base(model, options, streamCallback)
         {
             Input = input;
             Parameters = parameters;
