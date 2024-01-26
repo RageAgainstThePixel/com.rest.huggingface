@@ -54,7 +54,7 @@ namespace HuggingFace.Inference.ComputerVision.ImageSegmentation
                 await fileStream.DisposeAsync();
             }
 
-            result.Mask = await Rest.DownloadTextureAsync($"file://{localFilePath}", debug: debug, cancellationToken: cancellationToken);
+            result.Mask = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: new RestParameters(debug: debug), cancellationToken: cancellationToken);
         }
     }
 }

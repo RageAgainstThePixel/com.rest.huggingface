@@ -53,7 +53,7 @@ namespace HuggingFace.Inference.Multimodal.TextToImage
                 await fileStream.DisposeAsync();
             }
 
-            Image = await Rest.DownloadTextureAsync($"file://{localFilePath}", debug: debug, cancellationToken: cancellationToken);
+            Image = await Rest.DownloadTextureAsync($"file://{localFilePath}", parameters: new RestParameters(debug: debug), cancellationToken: cancellationToken);
         }
     }
 }
