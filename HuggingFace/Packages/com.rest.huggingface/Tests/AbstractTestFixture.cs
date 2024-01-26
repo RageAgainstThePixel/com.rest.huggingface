@@ -10,8 +10,10 @@ namespace HuggingFace.Tests
         {
             var auth = new HuggingFaceAuthentication().LoadDefaultsReversed();
             var settings = new HuggingFaceSettings();
-            HuggingFaceClient = new HuggingFaceClient(auth, settings);
-            //HuggingFaceClient.EnableDebug = true;
+            HuggingFaceClient = new HuggingFaceClient(auth, settings)
+            {
+                EnableDebug = true
+            };
         }
     }
 }

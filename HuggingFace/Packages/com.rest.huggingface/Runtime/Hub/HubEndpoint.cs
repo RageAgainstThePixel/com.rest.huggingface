@@ -31,7 +31,7 @@ namespace HuggingFace.Hub
         {
             var response = await Rest.GetAsync(GetUrl("models-tags-by-type"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             response.Validate();
-            return JsonConvert.DeserializeObject<ModelsTagsByType>(response.Body, client.JsonSerializationOptions);
+            return JsonConvert.DeserializeObject<ModelsTagsByType>(response.Body, HuggingFaceClient.JsonSerializationOptions);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace HuggingFace.Hub
 
             var response = await Rest.GetAsync(uriBuilder.Uri.ToString(), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             response.Validate();
-            return JsonConvert.DeserializeObject<IReadOnlyList<ModelInfo>>(response.Body, client.JsonSerializationOptions);
+            return JsonConvert.DeserializeObject<IReadOnlyList<ModelInfo>>(response.Body, HuggingFaceClient.JsonSerializationOptions);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace HuggingFace.Hub
 
             var response = await Rest.GetAsync(uriBuilder.Uri.ToString(), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             response.Validate();
-            return JsonConvert.DeserializeObject<ModelInfo>(response.Body, client.JsonSerializationOptions);
+            return JsonConvert.DeserializeObject<ModelInfo>(response.Body, HuggingFaceClient.JsonSerializationOptions);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace HuggingFace.Hub
         {
             var response = await Rest.GetAsync(GetUrl("tasks"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             response.Validate();
-            return JsonConvert.DeserializeObject<IReadOnlyDictionary<string, TaskInfo>>(response.Body, client.JsonSerializationOptions);
+            return JsonConvert.DeserializeObject<IReadOnlyDictionary<string, TaskInfo>>(response.Body, HuggingFaceClient.JsonSerializationOptions);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace HuggingFace.Hub
         {
             var response = await Rest.GetAsync(GetUrl("whoami-v2"), parameters: new RestParameters(client.DefaultRequestHeaders), cancellationToken);
             response.Validate();
-            return JsonConvert.DeserializeObject<UserInfo>(response.Body, client.JsonSerializationOptions);
+            return JsonConvert.DeserializeObject<UserInfo>(response.Body, HuggingFaceClient.JsonSerializationOptions);
         }
     }
 }
