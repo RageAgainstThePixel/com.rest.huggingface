@@ -146,11 +146,27 @@ namespace HuggingFace.Tests
         }
 
         [Test]
-        public async Task Test_07_TextGenerationTask()
+        public async Task Test_07_01_TextGenerationTask()
         {
             Assert.IsNotNull(HuggingFaceClient.InferenceEndpoint);
             var param = new TextGenerationParameters(topP: 0.9f);
             var task = new TextGenerationTask("The answer to the universe is", param);
+            var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<TextGenerationTask, TextGenerationResponse>(task);
+            Assert.IsNotNull(response);
+            Assert.IsNotEmpty(response.Results);
+
+            foreach (var result in response.Results)
+            {
+                Debug.Log(result.Text);
+            }
+        }
+
+        [Test]
+        public async Task Test_07_02_TextGenerationTask_Streaming()
+        {
+            Assert.IsNotNull(HuggingFaceClient.InferenceEndpoint);
+            var param = new TextGenerationParameters(topP: 0.9f);
+            var task = new TextGenerationTask("The answer to the universe is", param, streamCallback: Debug.Log);
             var response = await HuggingFaceClient.InferenceEndpoint.RunInferenceTaskAsync<TextGenerationTask, TextGenerationResponse>(task);
             Assert.IsNotNull(response);
             Assert.IsNotEmpty(response.Results);

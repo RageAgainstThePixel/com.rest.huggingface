@@ -7,10 +7,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Scripting;
 using Utilities.WebRequestRest;
 
 namespace HuggingFace.Inference
 {
+    [Preserve]
     public sealed class InferenceEndpoint : HuggingFaceBaseEndpoint
     {
         public int MaxRetryAttempts { get; set; } = 3;
